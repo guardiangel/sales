@@ -27,7 +27,7 @@ public class Log {
     private String type;//日志类型
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;//操作用户，使用userId关联，表示当前日志表有一个字段叫userId
 
     @Column(length = 1000)

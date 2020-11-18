@@ -19,7 +19,7 @@ public class Goods {
     @Column(length = 50)
     private String model;// 商品型号
     @ManyToOne
-    @JoinColumn(name = "typeId")
+    @JoinColumn(name = "type_id")
     private GoodsType type;// 商品类别
 
     @Column(length = 10)

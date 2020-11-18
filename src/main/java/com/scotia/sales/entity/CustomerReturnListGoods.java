@@ -6,14 +6,14 @@ import javax.persistence.*;
  * 客户退货单商品实体
  */
 @Entity
-@Table(name = "t_customerReturnListGoods")
+@Table(name = "t_customer_return_list_goods")
 public class CustomerReturnListGoods {
     @Id
     @GeneratedValue
     private Integer id; // 编号
 
     @ManyToOne
-    @JoinColumn(name = "customerReturnListId")
+    @JoinColumn(name = "customer_return_list_id")
     private CustomerReturnList customerReturnList;
 
     @Column(length=50)
@@ -27,7 +27,7 @@ public class CustomerReturnListGoods {
     private String model; // 商品型号
 
     @ManyToOne
-    @JoinColumn(name="typeId")
+    @JoinColumn(name="type_id")
     private GoodsType type; // 商品类别
 
     @Transient

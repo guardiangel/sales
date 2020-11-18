@@ -7,7 +7,7 @@ import javax.persistence.*;
  * 销售单商品实体
  */
 @Entity
-@Table(name = "t_saleListGoods")
+@Table(name = "t_sale_list_goods")
 public class SaleListGoods {
 
     @Id
@@ -24,11 +24,11 @@ public class SaleListGoods {
     private String model;// 商品型号
 
     @ManyToOne
-    @JoinColumn(name = "saleListId")
+    @JoinColumn(name = "sale_list_id")
     private SaleList saleList;// 销售单
 
     @ManyToOne
-    @JoinColumn(name = "typeId")
+    @JoinColumn(name = "type_id")
     private GoodsType type;// 商品类别
 
     @Transient

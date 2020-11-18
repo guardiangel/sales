@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "t_saleList")
+@Table(name = "t_sale_list")
 public class SaleList {
 
     @Id
@@ -16,7 +16,7 @@ public class SaleList {
     private String saleNumber; // 销售单号
 
     @ManyToOne
-    @JoinColumn(name = "customerId")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,7 +38,7 @@ public class SaleList {
     private List<SaleListGoods> saleListGoodsList;// 销售单商品集合
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(length=1000)

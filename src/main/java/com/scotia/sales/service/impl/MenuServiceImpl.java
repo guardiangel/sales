@@ -16,7 +16,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Menu findById(Integer id) {
-        return menuRepository.findById(id).orElse(null);
+        return menuRepository.findById(id).orElse(new Menu());
     }
 
     @Override

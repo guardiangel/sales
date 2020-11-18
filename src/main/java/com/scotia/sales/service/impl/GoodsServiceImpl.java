@@ -25,7 +25,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Goods findById(Integer id) {
-        return goodsRepository.findById(id).orElse(null);
+        return goodsRepository.findById(id).orElse(new Goods());
     }
 
     @Override

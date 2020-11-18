@@ -1,4 +1,4 @@
-
+/*这一行用来测试push to github*/
 USE db_jxc;
 
 /*Table structure for table t_customer */

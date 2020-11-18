@@ -8,7 +8,7 @@ import java.util.List;
  * 客户退货单
  */
 @Entity
-@Table(name = "t_customerReturnList")
+@Table(name = "t_customer_return_list")
 public class CustomerReturnList {
     @Id
     @GeneratedValue
@@ -18,7 +18,7 @@ public class CustomerReturnList {
     private String customerReturnNumber; // 客户退货单号
 
     @ManyToOne
-    @JoinColumn(name = "customerId")
+    @JoinColumn(name = "customer_id")
     private Customer customer;// 客户
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -37,7 +37,7 @@ public class CustomerReturnList {
     private Integer state; // 交易状态 1 已付  2 未付
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(length = 1000)

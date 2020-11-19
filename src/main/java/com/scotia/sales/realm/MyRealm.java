@@ -54,7 +54,7 @@ public class MyRealm extends AuthorizingRealm {
             //排除重复的角色名称
             roles.add(role.getName());
             //获取当前用户对应的角色对应的菜单列表
-            List<Menu> menuList = menuRepository.findByParentId(role.getId());
+            List<Menu> menuList = menuRepository.findByRoleId(role.getId());
             menuList.forEach(menu -> {
                 //将当前用户，当前角色对应的菜单名称，添加到认证信息类SimpleAuthorizationInfo
                 info.addStringPermission(menu.getName());

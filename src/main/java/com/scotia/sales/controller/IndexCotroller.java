@@ -12,7 +12,7 @@ public class IndexCotroller {
 
     @RequestMapping("/")
     public String root() {
-        logger.debug("进入到IndexCotroller的root方法");
+        logger.debug("*************进入到IndexCotroller的root方法");
         return "redirect:/login.html";
     }
 }

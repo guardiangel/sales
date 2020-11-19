@@ -137,6 +137,49 @@ public class UserCroller {
         return "欢迎您：" + currentUser.getTrueName() + "&nbsp;[&nbsp;" + currentRole.getName() + "&nbsp;]";
     }
 
+    /**
+     * [{"id":1,"text":"系统菜单","state":"closed","iconCls":"menu-plugin","attributes":{"url":null},
+     * 	"children":[{"id":10,"text":"进货管理","state":"closed","iconCls":"menu-1","attributes":{"url":null},
+     * 	"children":[{"id":1010,"text":"进货入库","state":"open","iconCls":"menu-11","attributes":{"url":"/purchase/purchase.html"}},
+     * {"id":1020,"text":"退货出库","state":"open","iconCls":"menu-12","attributes":{"url":"/purchase/return.html"}},
+     * {"id":1030,"text":"进货单据查询","state":"open","iconCls":"menu-13","attributes":{"url":"/purchase/purchaseSearch.html"}},
+     * {"id":1040,"text":"退货单据查询","state":"open","iconCls":"menu-14","attributes":{"url":"/purchase/returnSearch.html"}},
+     * {"id":1050,"text":"当前库存查询","state":"open","iconCls":"menu-15","attributes":{"url":"/common/stockSearch.html"}}]},
+     * {"id":20,"text":"销售管理","state":"closed","iconCls":"menu-2","attributes":{"url":null},
+     * 	"children":[{"id":2010,"text":"销售出库","state":"open","iconCls":"menu-21","attributes":{"url":"/sale/saleout.html"}},
+     * {"id":2020,"text":"客户退货","state":"open","iconCls":"menu-22","attributes":{"url":"/sale/salereturn.html"}},
+     * {"id":2030,"text":"销售单据查询","state":"open","iconCls":"menu-23","attributes":{"url":"/sale/saleSearch.html"}},
+     * {"id":2040,"text":"客户退货查询","state":"open","iconCls":"menu-24","attributes":{"url":"/sale/returnSearch.html"}},
+     * {"id":2050,"text":"当前库存查询","state":"open","iconCls":"menu-25","attributes":{"url":"/common/stockSearch.html"}}]},
+     * {"id":30,"text":"库存管理","state":"closed","iconCls":"menu-3","attributes":{"url":null},
+     * 	"children":[{"id":3010,"text":"商品报损","state":"open","iconCls":"menu-31","attributes":{"url":"/stock/damage.html"}},
+     * {"id":3020,"text":"商品报溢","state":"open","iconCls":"menu-32","attributes":{"url":"/stock/overflow.html"}},
+     * {"id":3030,"text":"库存报警","state":"open","iconCls":"menu-33","attributes":{"url":"/stock/alarm.html"}},
+     * {"id":3040,"text":"报损报溢查询","state":"open","iconCls":"menu-34","attributes":{"url":"/stock/damageOverflowSearch.html"}},
+     * {"id":3050,"text":"当前库存查询","state":"open","iconCls":"menu-35","attributes":{"url":"/common/stockSearch.html"}}]},
+     * {"id":40,"text":"统计报表","state":"closed","iconCls":"menu-4","attributes":{"url":null},
+     * 	"children":[{"id":4010,"text":"供应商统计","state":"open","iconCls":"menu-41","attributes":{"url":"/count/supplier.html"}},
+     * {"id":4020,"text":"客户统计","state":"open","iconCls":"menu-42","attributes":{"url":"/count/customer.html"}},
+     * {"id":4030,"text":"商品采购统计","state":"open","iconCls":"menu-43","attributes":{"url":"/count/purchase.html"}},
+     * {"id":4040,"text":"商品销售统计","state":"open","iconCls":"menu-44","attributes":{"url":"/count/sale.html"}},
+     * {"id":4050,"text":"按日统计分析","state":"open","iconCls":"menu-45","attributes":{"url":"/count/saleDay.html"}},
+     * {"id":4060,"text":"按月统计分析","state":"open","iconCls":"menu-46","attributes":{"url":"/count/saleMonth.html"}}]},
+     * {"id":50,"text":"基础资料","state":"closed","iconCls":"menu-5","attributes":{"url":null},
+     * 	"children":[{"id":5010,"text":"供应商管理","state":"open","iconCls":"menu-51","attributes":{"url":"/basicData/supplier.html"}},
+     * {"id":5020,"text":"客户管理","state":"open","iconCls":"menu-52","attributes":{"url":"/basicData/customer.html"}},
+     * {"id":5030,"text":"商品管理","state":"open","iconCls":"menu-53","attributes":{"url":"/basicData/goods.html"}},
+     * {"id":5040,"text":"期初库存","state":"open","iconCls":"menu-54","attributes":{"url":"/basicData/stock.html"}}]},
+     * {"id":60,"text":"系统管理","state":"closed","iconCls":"menu-6","attributes":{"url":null},
+     * 	"children":[{"id":6010,"text":"角色管理","state":"open","iconCls":"menu-61","attributes":{"url":"/power/role.html"}},
+     * {"id":6020,"text":"用户管理","state":"open","iconCls":"menu-62","attributes":{"url":"/power/user.html"}},
+     * {"id":6030,"text":"系统日志","state":"open","iconCls":"menu-65","attributes":{"url":"/power/log.html"}},
+     * {"id":6040,"text":"修改密码","state":"open","iconCls":"menu-63","attributes":{"url":null}},
+     * {"id":6050,"text":"安全退出","state":"open","iconCls":"menu-64","attributes":{"url":null}}]}]}]
+     * @param httpSession
+     * @param parentId
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @PostMapping("/loadMenuInfo")
     public String loadMenuInfo(HttpSession httpSession, Integer parentId) throws Exception {

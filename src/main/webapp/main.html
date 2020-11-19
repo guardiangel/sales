@@ -64,11 +64,13 @@
 				$("#tree").tree('expandAll');
 			},
 			onClick:function(node){
+				//此处id,即是t_menu表的id
 				if(node.id==6050){
 					logout();
 				}else if(node.id==6040){
 					openPasswordModifyDialog();
 				}else　if(node.attributes.url){
+					//node.attributes.url值如下："attributes":{"url":"/stock/damageOverflowSearch.html"}
 					openTab(node);
 				}
 			}
@@ -100,6 +102,7 @@
 		function openPasswordModifyDialog(){
 			$("#dlg").dialog("open").dialog("setTitle","修改密码");
 			url="/admin/user/modifyPassword";
+			window.location.href=url;
 		}
 		
 		

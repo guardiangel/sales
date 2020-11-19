@@ -2,6 +2,7 @@ package com.scotia.sales.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
 
 /**
  * 用户实体类
@@ -89,4 +90,6 @@ public class User {
                 ", roles='" + roles + '\'' +
                 '}';
     }
+
+
 }

@@ -15,7 +15,6 @@
 
         function openPurchaseListGoodsAddDialog() {
             $("#dlg").dialog("open").dialog("setTitle", "进货入库商品选择");
-
             $("#tree").tree({
                 url: '/admin/goodsType/loadTreeInfo',
                 onLoadSuccess: function (node, data) {
@@ -81,13 +80,29 @@
         }
 
         $(document).ready(function () {
-
-            $('#supplier').combobox({
+           /* $('#supplierId').combobox({
                 mode: 'remote',
                 url: '/admin/supplier/comboList',
-                valueField: 'name',
+                valueField: 'id',
                 textField: 'name',
-                delay: 100
+                delay:5000
+            });*/
+
+            $.ajax({
+                url: '/admin/supplier/comboList',
+                async: false,  　　//同步方式运行
+                success: function (data, i) {
+                    $("#supplierId").combobox({
+                        valueField: 'id',
+                        textField: 'name',
+                        loadFilter: function (data) {
+                            if (data && data.rows.length > 0) {
+
+
+                            }
+                        }
+                    });
+                }
             });
 
             $("#purchaseDate").datebox("setValue", genTodayStr()); // 设置当前日期
@@ -129,10 +144,7 @@
             });
         }
 
-
         //  商品类别模块管理
-
-
         function openGoodsTypeAddDialog() {
             $("#dlg2").dialog("open").dialog("setTitle", "新增商品类别");
         }
@@ -329,9 +341,8 @@
             <table cellspacing="8px">
                 <tr>
                     <td>
-                        供应商：<select class="easyui-combobox" id="supplierId" name="supplier.id" style="width: 200px;"
-                                    required=true
-                                    data-options="required:true,panelHeight:'auto',valueField:'id',textField:'name',url:'/admin/supplier/comboList'"></select>
+                        <!--data-options="required:true,panelHeight:'auto',valueField:'id',textField:'name',url:'/admin/supplier/comboList'"-->
+                        供应商：<input class="easyui-combobox" id="supplierId" name="supplierId"  required></input>
                     </td>
                     <td>
                         &nbsp;&nbsp;&nbsp;&nbsp;应付金额：<input type="text" id="amountPayable" name="amountPayable"

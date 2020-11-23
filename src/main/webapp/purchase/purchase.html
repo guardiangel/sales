@@ -80,7 +80,8 @@
         }
 
         $(document).ready(function () {
-           /* $('#supplierId').combobox({
+            //如果对应标签无data-options选项，可用此加载处理
+          /*  $('#supplierId').combobox({
                 mode: 'remote',
                 url: '/admin/supplier/comboList',
                 valueField: 'id',
@@ -88,22 +89,19 @@
                 delay:5000
             });*/
 
-            $.ajax({
+           /* $.ajax({
                 url: '/admin/supplier/comboList',
                 async: false,  　　//同步方式运行
-                success: function (data, i) {
-                    $("#supplierId").combobox({
-                        valueField: 'id',
-                        textField: 'name',
-                        loadFilter: function (data) {
-                            if (data && data.rows.length > 0) {
-
-
-                            }
-                        }
-                    });
+                type:'post',
+                mode:'remote',
+                success: function (data) {
+                    var theorem2 = [{ 'text': '', 'id': ''}];
+                    for (var i = 0; i < data.length; i++) {
+                        theorem2.push({ "text": data[i].name, "id": data[i].id });
+                    }
+                    $("#supplierId").combobox("loadData", theorem2);
                 }
-            });
+            });*/
 
             $("#purchaseDate").datebox("setValue", genTodayStr()); // 设置当前日期
 
@@ -341,8 +339,11 @@
             <table cellspacing="8px">
                 <tr>
                     <td>
-                        <!--data-options="required:true,panelHeight:'auto',valueField:'id',textField:'name',url:'/admin/supplier/comboList'"-->
-                        供应商：<input class="easyui-combobox" id="supplierId" name="supplierId"  required></input>
+                        <!--<select class="easyui-combobox"  id="supplierId" name="supplierId" style="width: 200px;"
+                                required></select>-->
+                        <select class="easyui-combobox"  id="supplierId" name="supplierId" style="width: 200px;"
+                                required=true data-options="required:true,panelHeight:'auto',valueField:'id',textField:'name',url:'/admin/supplier/comboList'"></select>
+                        供应商：<!--<input class="easyui-combobox" id="supplierId" name="supplierId"  required></input>-->
                     </td>
                     <td>
                         &nbsp;&nbsp;&nbsp;&nbsp;应付金额：<input type="text" id="amountPayable" name="amountPayable"

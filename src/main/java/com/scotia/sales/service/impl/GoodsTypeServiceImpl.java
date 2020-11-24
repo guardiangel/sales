@@ -1,4 +1,4 @@
-package com.scotia.sales.controller.admin;
+package com.scotia.sales.service.impl;
 
 import com.scotia.sales.entity.GoodsType;
 import com.scotia.sales.repository.GoodsTypeRepository;

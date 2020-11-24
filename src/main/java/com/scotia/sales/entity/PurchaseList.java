@@ -1,5 +1,6 @@
 package com.scotia.sales.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -22,15 +23,12 @@ public class PurchaseList {
 
     //如果时间不对，则可能是数据源驱动时区问题，本例修改application.yml中的serverTimezone=GMT%2B8
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")//JSON.stringify传入的数据，后续查询是否有其他方法2020-11-24 14:53:44
     private Date purchaseDate; // 进货日期
 
     @Transient
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date bPurchaseDate; // 起始时间 搜索用到
 
     @Transient
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ePurchaseDate; // 结束时间 搜索用到
 
     private float amountPayable; // 应付金额
@@ -73,6 +71,7 @@ public class PurchaseList {
         this.supplier = supplier;
     }
 
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
     public Date getPurchaseDate() {
         return purchaseDate;
     }

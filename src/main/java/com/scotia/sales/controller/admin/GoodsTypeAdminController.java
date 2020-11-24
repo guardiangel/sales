@@ -114,7 +114,6 @@ public class GoodsTypeAdminController {
     public String loadTreeInfo() throws Exception {
         logService.save(new Log(Log.SEARCH_ACTION, "查询商品类别信息"));
         String result = getAllByParentId(ConstantParam.GOODSTYPE_ROOT_PARENT_ID).toString();
-        System.err.println("loadTreeInfo=" + result);
         return result;
     }
 

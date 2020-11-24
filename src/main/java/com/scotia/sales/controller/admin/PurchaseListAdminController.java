@@ -47,10 +47,14 @@ public class PurchaseListAdminController {
     @Resource
     private PurchaseListGoodsService purchaseListGoodsService;
 
+    /**
+     * 格式化日期，对于前端为yyyy-mm-dd格式，后端为yyyy-mm-dd hh:mm:ss格式
+     * @param binder
+     */
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);
+        dateFormat.setLenient(false);//不强制校验
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
@@ -81,7 +85,6 @@ public class PurchaseListAdminController {
 
         purchaseList.setUser(userService.findByUserName((String) SecurityUtils.getSubject().getPrincipal()));
         Gson gson = new Gson();
-        System.err.println("goodsJson=" + goodsJson);
         List<PurchaseListGoods> plgList = gson.fromJson(goodsJson, new TypeToken<List<PurchaseListGoods>>() {
         }.getType());
         purchaseListService.save(purchaseList, plgList);

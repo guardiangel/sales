@@ -12,7 +12,7 @@
     <script type="text/javascript">
 
         function formatSupplier(val, row) {
-            return val.name;
+            return val.name;//此处对应Supplier类中的属性name
         }
 
         function formatAmountPayable(val, row) {
@@ -29,7 +29,7 @@
             $("#dg").datagrid({
                 onClickRow: function (index, row) {
                     $("#dg2").datagrid({
-                        url: "/admin/purchaseList/listGoods",
+                        url:'/admin/purchaseList/listGoods',
                         queryParams: {
                             purchaseListId: row.id
                         }
@@ -47,15 +47,14 @@
                 supplierId = $("#s_supplier").combobox("getValue");
             }
             $("#dg").datagrid({
-                url: '/admin/purchaseList/list',
-                queryParams: {
-                    purchaseNumber: $("#s_purchaseNumber").val(),
+                url:'/admin/purchaseList/list',
+                queryParams:{
+                    purchaseNumber:$("#s_purchaseNumber").val(),
                     'supplier.id':supplierId,
-                    state: $("#s_state").combobox("getValue"),
-                    bPurchaseDate: $("#s_bPurchaseDate").datebox("getValue"),
-                    ePurchaseDate: $("#s_ePurchaseDate").datebox("getValue")
+                    state:$("#s_state").combobox("getValue"),
+                    bPurchaseDate:$("#s_bPurchaseDate").datebox("getValue"),
+                    ePurchaseDate:$("#s_ePurchaseDate").datebox("getValue")
                 }
-
             });
         }
 
@@ -68,7 +67,7 @@
         }
 
         function formatUser(val, row) {
-            return val.trueName;
+            return val.trueName;//此处对应User类中的属性trueName
         }
 
     </script>
@@ -79,13 +78,13 @@
            fitColumns="true" rownumbers="true" singleSelect="true" toolbar="#tb">
         <thead>
         <tr>
-            <td field="id" width="30" align="center" hidden="hidden">进货单ID</td>
-            <td field="purchaseNumber" width="30" align="center">进货单号</td>
-            <td field="purchaseDate" width="20" align="center">进货日期</td>
-            <td field="supplier" width="50" align="center" formatter="formatSupplier">供应商</td>
-            <td field="amountPayable" width="15" align="center" formatter="formatAmountPayable">进货金额</td>
-            <td field="user" width="20" align="center" formatter="formatUser">操作员</td>
-            <td field="remarks" width="100" align="center">操作员</td>
+            <th field="id" width="30" align="center" hidden="hidden">进货单ID</th>
+            <th field="purchaseNumber" width="30" align="center">进货单号</th>
+            <th field="purchaseDate" width="20" align="center">进货日期</th>
+            <th field="supplier" width="50" align="center" formatter="formatSupplier">供应商</th>
+            <th field="amountPayable" width="15" align="center" formatter="formatAmountPayable">进货金额</th>
+            <th field="user" width="20" align="center" formatter="formatUser">操作员</th>
+            <th field="remarks" width="100" align="center">备注</th>
         </tr>
         </thead>
     </table>

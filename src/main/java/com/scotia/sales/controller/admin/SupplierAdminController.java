@@ -27,7 +27,9 @@ public class SupplierAdminController {
         if (q == null) {
             q = "";
         }
-        return supplierService.findByName("%"+q+"%");
+
+        List<Supplier> result = supplierService.findByName("%"+q+"%");
+        return result;
     }
 
 

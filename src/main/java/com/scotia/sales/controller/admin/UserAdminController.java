@@ -39,7 +39,7 @@ public class UserAdminController {
         userService.save(user);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("success", true);
-        logService.save(new Log(Log.UPDATE_ACTION, "修改密码")); // 写入日志    System.err.println("两个用户相同");
+        logService.save(new Log(Log.UPDATE_ACTION, "修改密码")); // 写入日志
         return map;
     }
 

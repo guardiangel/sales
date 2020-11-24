@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service("purchaseListService")
@@ -45,14 +46,19 @@ public class PurchaseListServiceImpl implements PurchaseListService {
     }
 
     @Override
+    @Transactional
     public void save(PurchaseList purchaseList, List<PurchaseListGoods> purchaseListGoodsList) {
-// 保存每个进货单商品
+
+        //注意在方法上添加事物，否则会报object references an unsaved transient instance错误。
+
+        // 保存每个进货单商品
         for (PurchaseListGoods purchaseListGoods : purchaseListGoodsList) {
-            purchaseListGoods.setType(goodsTypeRepository.findById(purchaseListGoods.getTypeId()).orElse(new GoodsType())); // 设置类别
+            purchaseListGoods.setType(goodsTypeRepository.findById(purchaseListGoods.getTypeId()).orElse(null)); // 设置类别
+           // purchaseListGoods.setPurchaseList(p); // 设置采购单
             purchaseListGoods.setPurchaseList(purchaseList); // 设置采购单
             purchaseListGoodsRepository.save(purchaseListGoods);
             // 修改商品库存 和 成本均价 以及上次进价
-            Goods goods = goodsRepository.findById(purchaseListGoods.getGoodsId()).orElse(new Goods());
+            Goods goods = goodsRepository.findById(purchaseListGoods.getGoodsId()).orElse(null);
             // 计算成本均价
             float avePurchasingPrice = (goods.getPurchasingPrice() * goods.getInventoryQuantity() + purchaseListGoods.getPrice() * purchaseListGoods.getNum()) / (goods.getInventoryQuantity() + purchaseListGoods.getNum());
             goods.setPurchasingPrice(MathUtil.format2Bit(avePurchasingPrice));
@@ -61,7 +67,9 @@ public class PurchaseListServiceImpl implements PurchaseListService {
             goods.setState(2);
             goodsRepository.save(goods);
         }
-        purchaseListRepository.save(purchaseList); // 保存进货单
+
+            purchaseListRepository.save(purchaseList); // 保存进货单
+
     }
 
 

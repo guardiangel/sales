@@ -1,5 +1,6 @@
 package com.scotia.sales.service.impl;
 
+import com.scotia.sales.constant.ConstantParam;
 import com.scotia.sales.entity.Goods;
 import com.scotia.sales.repository.GoodsRepository;
 import com.scotia.sales.service.GoodsService;
@@ -43,7 +44,9 @@ public class GoodsServiceImpl implements GoodsService {
                 if (StringUtil.isNotEmpty(goods.getName())) {
                     predicate.getExpressions().add(criteriaBuilder.like(root.get("name"), "%" + goods.getName().trim() + "%"));
                 }
-                if (goods.getType() != null && goods.getType().getId() != null && goods.getType().getId() != 1) {
+                if (goods.getType() != null
+                        && goods.getType().getId() != null
+                        && goods.getType().getId() != ConstantParam.GOODSTYPE_ROOT_ID) {
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("type").get("id"), goods.getType().getId()));
                 }
                 if (StringUtil.isNotEmpty(goods.getCodeOrName())) {
@@ -92,7 +95,9 @@ public class GoodsServiceImpl implements GoodsService {
                 if (StringUtil.isNotEmpty(goods.getName())) {
                     predicate.getExpressions().add(criteriaBuilder.like(root.get("name"), "%" + goods.getName().trim() + "%"));
                 }
-                if (goods.getType() != null && goods.getType().getId() != null && goods.getType().getId() != 1) {
+                if (goods.getType() != null
+                        && goods.getType().getId() != null
+                        && goods.getType().getId() != ConstantParam.GOODSTYPE_ROOT_ID) {
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("type").get("id"), goods.getType().getId()));
                 }
                 if (StringUtil.isNotEmpty(goods.getCodeOrName())) {

@@ -17,18 +17,22 @@
             $("#dlg").dialog("open").dialog("setTitle", "进货入库商品选择");
             $("#tree").tree({
                 url: '/admin/goodsType/loadTreeInfo',
+                type:'post',
+                async: false,  　　//同步方式运行
                 onLoadSuccess: function (node, data) {
                     var rootNode = $("#tree").tree('getRoot');
                     $("#tree").tree('expand', rootNode.target);
                 },
                 onClick: function (node) {
-                    if (node.attributes.state == 0) { // 假如是叶子节点 删除按钮恢复可用
+                    if (node.attributes.state == 0) { // 假如是叶子节点 商品类别的删除按钮恢复可用
                         $('#del').linkbutton('enable');
                         $('#del').attr("href", "javascript:deleteGoodsType()");
                     } else {
                         $('#del').linkbutton('disable');
                     }
                     $("#dg3").datagrid('load', {
+                        //此处的type.id即为GoodsType中的id,用法参考GoodsServiceImpl中的list方法。
+                        //即在商品信息中，增加一个type的域，里面为type id。配合实体类Goods中的type定义和用法。
                         "type.id": node.id
                     });
                 }
@@ -36,7 +40,7 @@
         }
 
         function openPurchaseListGoodsModifyDialog() {
-            $("#saveAndAddNextBuuton").hide();
+            $("#saveAndAddNextButton").hide();
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
                 $.messager.alert("系统提示", "请选择一个商品！");
@@ -49,8 +53,8 @@
             $("#price").numberbox("setValue", row.price);
             $("#num").numberbox("setValue", row.num);
             $("#num").focus();
-            $("#action").val("modify");
-            $("#rowIndex").val($("#dg").datagrid("getRowIndex", row));
+            $("#action").val("modify");//设置一个值域，在saveGoods方法使用
+            $("#rowIndex").val($("#dg").datagrid("getRowIndex", row));//设置当前行号
         }
 
         function deletePurchaseListGoods() {
@@ -67,7 +71,7 @@
             });
         }
 
-
+        //重新计算当前所选择的列表的应付和实付金额
         function setPurchaseListAmount() {
             var rows = $("#dg").datagrid("getRows");
             var amount = 0;
@@ -81,27 +85,13 @@
 
         $(document).ready(function () {
             //如果对应标签无data-options选项，可用此加载处理
-          /*  $('#supplierId').combobox({
-                mode: 'remote',
-                url: '/admin/supplier/comboList',
-                valueField: 'id',
-                textField: 'name',
-                delay:5000
-            });*/
-
-           /* $.ajax({
-                url: '/admin/supplier/comboList',
-                async: false,  　　//同步方式运行
-                type:'post',
-                mode:'remote',
-                success: function (data) {
-                    var theorem2 = [{ 'text': '', 'id': ''}];
-                    for (var i = 0; i < data.length; i++) {
-                        theorem2.push({ "text": data[i].name, "id": data[i].id });
-                    }
-                    $("#supplierId").combobox("loadData", theorem2);
-                }
-            });*/
+            /*  $('#supplierId').combobox({
+                  mode: 'remote',
+                  url: '/admin/supplier/comboList',
+                  valueField: 'id',
+                  textField: 'name',
+                  delay:5000
+              });*/
 
             $("#purchaseDate").datebox("setValue", genTodayStr()); // 设置当前日期
 
@@ -109,11 +99,12 @@
 
         });
 
-
+        //保存进货的商品
         function savePurchaseGoods() {
+            // JSON.stringify JavaScript值转换为 JSON 字符串
             var goodsJson = JSON.stringify($("#dg").datagrid("getData").rows);
             $("#goodsJson").val(goodsJson);
-            $("#purchaseNumber").val($("#dh").text());
+            $("#purchaseNumber").val($("#dh").text());//进货单号
             $("#fm6").form("submit", {
                 url: "/admin/purchaseList/save",
                 onSubmit: function () {
@@ -160,26 +151,31 @@
             }, "json");
         }
 
+        //保存商品类别
         function saveGoodsType() {
             var goodsTypeName = $("#goodsTypeName").val();
+            //验证表单，配合为required，即不为空。
             if (!$("#fm").form("validate")) {
                 return;
             }
-            var node = $('#tree').tree('getSelected'); // 获取选中节点
-            var parentId; // 父节点Id
-            if (node == null) {
-                parentId = 1;
+            var selectedNode = $("#tree").tree("getSelected");//获得选中的节点
+            var parentId = -Infinity;//父节点id，初始化一个无穷小值。
+            if (selectedNode == null) {
+                parentId=1;//此处的1即为商品类别表中的id
             } else {
-                parentId = node.id;
+                parentId=selectedNode.id;
             }
-            $.post("/admin/goodsType/save", {name: goodsTypeName, parentId: parentId}, function (result) {
-                if (result.success) {
+            //在当前节点下，添加一个商品类别
+            $.post("/admin/goodsType/save",{name:goodsTypeName,parentId:parentId},function(result){
+                if(result.success){
                     $('#tree').tree('reload');
                     closeGoodsTypeDialog();
-                } else {
-                    $.messager.alert("系统提示", "提交失败，请联系管理员！");
+                }else{
+                    $.messager.alert("系统提示","提交失败，请联系管理员！");
                 }
             }, "json");
+
+
         }
 
 
@@ -197,6 +193,7 @@
         }
 
         function searchGoods() {
+            //提交到url="/admin/goods/list，参数为codeOrName
             $("#dg3").datagrid('load', {
                 "codeOrName": $("#s_codeOrName").val()
             });
@@ -207,8 +204,9 @@
             $("#dlg").dialog("close");
         }
 
+        //打开商品对话框，选择商品
         function openGoodsChooseDialog() {
-            $("#saveAndAddNextBuuton").show();
+            $("#saveAndAddNextButton").show();
             var selectedRows = $("#dg3").datagrid("getSelections");
             if (selectedRows.length != 1) {
                 $.messager.alert("系统提示", "请选择一个商品！");
@@ -218,9 +216,9 @@
             $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
             $("#fm4").form("load", row);
             $("#lastPurchasingPrice").val("￥" + row.lastPurchasingPrice);
-            $("#price").numberbox("setValue", row.lastPurchasingPrice);
+            $("#price").numberbox("setValue", row.lastPurchasingPrice);//控制只可以输入数字
             $("#num").focus();
-            $("#action").val("add");
+            $("#action").val("add");//增加值域，在saveGoods方法使用
         }
 
         function closeGoodsChooseDialog() {
@@ -242,7 +240,7 @@
             return "￥" + val;
         }
 
-
+        //保存商品
         function saveGoods(type) {
             var action = $("#action").val();
             if (!$("#fm5").form("validate")) {
@@ -304,7 +302,7 @@
             $("#dg").datagrid({
                 //双击事件
                 onDblClickRow: function (index, row) {
-                    $("#saveAndAddNextBuuton").hide();
+                    $("#saveAndAddNextButton").hide();
                     $("#dlg4").dialog("open").dialog("setTitle", "修改进货单商品");
                     $("#fm4").form("load", row);
                     $("#lastPurchasingPrice").val("￥" + row.lastPurchasingPrice);
@@ -320,11 +318,15 @@
             $("#dg3").datagrid({
                 //双击事件
                 onDblClickRow: function (index, row) {
+                    $("#saveAndAddNextButton").show();
+
                     $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
                     $("#fm4").form("load", row);
                     $("#lastPurchasingPrice").val("￥" + row.lastPurchasingPrice);
                     $("#price").numberbox("setValue", row.lastPurchasingPrice);
                     $("#num").focus();
+
+                    $("#action").val("add");//增加值域，在saveGoods方法使用
                 }
             });
 
@@ -341,9 +343,11 @@
                     <td>
                         <!--<select class="easyui-combobox"  id="supplierId" name="supplierId" style="width: 200px;"
                                 required></select>-->
-                        <select class="easyui-combobox"  id="supplierId" name="supplierId" style="width: 200px;"
-                                required=true data-options="required:true,panelHeight:'auto',valueField:'id',textField:'name',url:'/admin/supplier/comboList'"></select>
-                        供应商：<!--<input class="easyui-combobox" id="supplierId" name="supplierId"  required></input>-->
+                        <!--添加onSelect事件data-options="onSelect:chooseOneSupplier“-->
+                        供应商：<select class="easyui-combobox" id="supplierId" name="supplierId" style="width: 200px;"
+                                    required=true
+                                    data-options="required:true,panelHeight:'auto',valueField:'id',textField:'name',url:'/admin/supplier/comboList'"></select>
+                        <!--<input class="easyui-combobox" id="supplierId" name="supplierId"  required></input>-->
                     </td>
                     <td>
                         &nbsp;&nbsp;&nbsp;&nbsp;应付金额：<input type="text" id="amountPayable" name="amountPayable"
@@ -533,7 +537,7 @@
 </div>
 
 <div id="dlg-buttons4">
-    <a id="saveAndAddNextBuuton" href="javascript:saveGoods(2)" class="easyui-linkbutton"
+    <a id="saveAndAddNextButton" href="javascript:saveGoods(2)" class="easyui-linkbutton"
        iconCls="icon-ok">保存并新增下一商品</a>
     <a href="javascript:saveGoods(1)" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
     <a href="javascript:closeGoodsChooseDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>

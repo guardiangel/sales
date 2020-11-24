@@ -1,5 +1,7 @@
 package com.scotia.sales.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +20,9 @@ public class PurchaseList {
     @JoinColumn(name="supplier_id")
     private Supplier supplier; // 供应商
 
+    //如果时间不对，则可能是数据源驱动时区问题，本例修改application.yml中的serverTimezone=GMT%2B8
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")//JSON.stringify传入的数据，后续查询是否有其他方法2020-11-24 14:53:44
     private Date purchaseDate; // 进货日期
 
     @Transient

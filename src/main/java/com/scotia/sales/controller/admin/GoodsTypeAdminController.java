@@ -152,7 +152,7 @@ public class GoodsTypeAdminController {
             jsonObject.addProperty("id", goodsType.getId());
             jsonObject.addProperty("text", goodsType.getName());
             jsonObject.addProperty("state",
-                    goodsType.getState() == 1 ?
+                    goodsType.getState() == ConstantParam.GOODSTYPE_STATE_NOT_LEAF ?
                             ConstantParam.GOODSTYPE_NODE_CLOSE
                             : ConstantParam.GOODSTYPE_NODE_OPEN);
             jsonObject.addProperty("iconCls", goodsType.getIcon());

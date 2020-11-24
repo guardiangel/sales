@@ -344,7 +344,8 @@
                         <!--<select class="easyui-combobox"  id="supplierId" name="supplierId" style="width: 200px;"
                                 required></select>-->
                         <!--添加onSelect事件data-options="onSelect:chooseOneSupplier“-->
-                        供应商：<select class="easyui-combobox" id="supplierId" name="supplierId" style="width: 200px;"
+                        <!--注意类似于supplier.id的用法-->
+                        供应商：<select class="easyui-combobox" id="supplierId" name="supplier.id" style="width: 200px;"
                                     required=true
                                     data-options="required:true,panelHeight:'auto',valueField:'id',textField:'name',url:'/admin/supplier/comboList'"></select>
                         <!--<input class="easyui-combobox" id="supplierId" name="supplierId"  required></input>-->

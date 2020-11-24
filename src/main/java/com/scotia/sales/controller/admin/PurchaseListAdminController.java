@@ -13,11 +13,17 @@ import com.scotia.sales.util.DateUtil;
 import com.scotia.sales.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +46,14 @@ public class PurchaseListAdminController {
 
     @Resource
     private PurchaseListGoodsService purchaseListGoodsService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
 
 
     @ResponseBody
@@ -76,6 +90,32 @@ public class PurchaseListAdminController {
 
         return resultMap;
     }
+
+    @ResponseBody
+    @RequestMapping("/listGoods")
+    @RequiresPermissions(value = {"进货单据查询"})
+    public Map<String,Object> listGoods(Integer purchaseListId)throws Exception{
+
+        if (purchaseListId == null) {
+            return null;
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        List<PurchaseListGoods> purchaseListGoods = purchaseListGoodsService.listByPurchaseListId(purchaseListId);
+        resultMap.put("rows", purchaseListGoods);
+        return resultMap;
+    }
+
+    @ResponseBody
+    @RequestMapping("/list")
+    @RequiresPermissions(value = {"进货单据查询"})
+    public Map<String,Object> list(PurchaseList purchaseList)throws Exception{
+        Map<String, Object> resultMap = new HashMap<>();
+        List<PurchaseList> purchaseLists = purchaseListService.list(purchaseList, Sort.Direction.DESC, "purchaseDate");
+        resultMap.put("rows", purchaseLists);
+        return resultMap;
+    }
+
+
 
 
 }

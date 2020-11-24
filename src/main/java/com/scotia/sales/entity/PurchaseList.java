@@ -26,9 +26,11 @@ public class PurchaseList {
     private Date purchaseDate; // 进货日期
 
     @Transient
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date bPurchaseDate; // 起始时间 搜索用到
 
     @Transient
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ePurchaseDate; // 结束时间 搜索用到
 
     private float amountPayable; // 应付金额

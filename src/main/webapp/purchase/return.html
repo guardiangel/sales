@@ -38,7 +38,7 @@
             return "￥" + val;
         }
 
-        //打开退货单商品窗口
+        //打开退货单商品新增窗口
         function openReturnListGoodsAddDialog() {
             $("#dlg").dialog("open").dialog("setTitle", "退货出库商品选择");
             $("#tree").tree({
@@ -57,13 +57,49 @@
                         $("#del").linkbutton("disable");
                     }
                     //给商品赋一个商品类型id
-                    $("dg3").datagrid("load", {
+                    //此处的type.id即为GoodsType中的id,用法参考GoodsServiceImpl中的list方法。
+                    //即在商品信息中，增加一个type的域，里面为type id。配合实体类Goods中的type定义和用法。
+                    //点击每个商品类型时，重新加载商品信息
+                    $("#dg3").datagrid("load", {
                         "type.id": node.id
                     });
                 }
             });
         }
 
+        //打开退货单商品修改窗口
+        function openReturnListGoodsModifyDialog() {
+            $("#saveAndAddNextButton").hide();
+            var selectedRows = $("#dg").datagrid("getSelections");
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一个商品");
+                return;
+            }
+            var row = selectedRows[0];
+            $("#dlg4").dialog("open").dialog("setTitle", "修改退货单商品");
+            $("#fm4").form("load", row);
+            $("#lastReturnPrice").val("￥" + row.lastPurchasingPrice);
+            $("#price").numberbox("setValue", row.price);
+            $("#num").numberbox("setValue", row.num);
+            $("#num").focus();
+            $("#action").val("modify");//设置一个值域，在saveGoods方法使用
+            $("#rowIndex").val($("#dg").datagrid("getRowIndex", row));//设置当前行号
+        }
+
+        //删除选中的退货单商品
+        function deleteReturnListGoods() {
+            var selectedRows = $("#dg").datagrid("getSelections");
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择要删除的商品");
+                return;
+            }
+            $.messager.confirm("系统提示", "您确定要删除这个商品吗？", function (r) {
+                if (r) {
+                    $("#dg").datagrid("deleteRow", $("#dg").datagrid("getRowIndex", selectedRows[0]));
+                    setReturnListAmount();
+                }
+            });
+        }
 
         //商品类型管理模块
         function openGoodsTypeAddDialog() {
@@ -131,27 +167,111 @@
             var row = selectRows[0];
             $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
             $("#fm4").form("load", row);//使用选中的行的数据，为新打开的窗口赋值
-            $("#lastReturnPrice").val("￥"+row.lastPurchasingPrice);
+            $("#lastReturnPrice").val("￥" + row.lastPurchasingPrice);
             $("#price").numberbox("setValue", row.lastPurchasingPrice);
             $("#num").focus();
-            $("#action").val("add");
+            $("#action").val("add");//打开窗口选择界面时，赋值，用于保存商品时判断处理
         }
 
         //关闭商品选择窗口
         function closeGoodsChooseDialog() {
-
+            $("#dlg4").dialog("close");
+            resetValue();
         }
+
+        function resetValue() {
+            $("#num").numberbox("setValue", "");
+            $("#price").val("");
+        }
+
+        //保存商品
+        function saveGoods(type) {
+            var action = $("#action").val();
+            if (!$("#fm5").form("validate")) {
+                return;
+            }
+            if (action == "add") {
+                var selectedRows = $("#dg3").datagrid("getSelections");
+                var row = selectedRows[0];
+                var price = $("#price").numberbox("getValue");
+                var num = $("#num").numberbox("getValue");
+                var total = price * num;
+                //进入退货选择页面时的主商品内容区域
+                $("#dg").datagrid("appendRow", {
+                    code: row.code,
+                    name: row.name,
+                    model: row.model,
+                    unit: row.unit,
+                    price: price,
+                    num: num,
+                    total: total,
+                    typeId: row.type.id,
+                    goodsId: row.id,
+                    inventoryQuantity: row.inventoryQuantity,
+                    lastPurchasingPrice: row.lastPurchasingPrice
+                });
+            } else if (action == "modify") {
+                var rowIndex = $("#rowIndex").val();
+                alert(rowIndex);
+                var selectedRows = $("#dg").datagrid("getSelections");
+                var row = selectedRows[0];
+                var price = $("#price").numberbox("getValue");
+                var num = $("#num").numberbox("getValue");
+                var total = price * num;
+                $("#dg").datagrid("updateRow", {
+                    index: rowIndex,
+                    row: {
+                        code: row.code,
+                        name: row.name,
+                        model: row.model,
+                        unit: row.unit,
+                        price: price,
+                        num: num,
+                        total: total,
+                        typeId: row.typeId,
+                        goodsId: row.id,
+                        inventoryQuantity: row.inventoryQuantity,
+                        lastPurchasingPrice: row.lastPurchasingPrice
+                    }
+                });
+            }
+            setReturnListAmount();
+            if (type == 1) {
+                closeGoodsDialog();
+            }
+            closeGoodsChooseDialog();
+        }
+
+        function closeGoodsDialog() {
+            $("#s_codeOrName").val("");
+            $("#dlg").dialog("close");
+        }
+
+        //重新计算
+        function setReturnListAmount() {
+            //获得所有的行
+            var rows = $("#dg").datagrid("getRows");
+            var amount = 0;
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                amount += row.total;
+            }
+            $("#amountPayable").val(amount.toFixed(2));
+            $("#amountPaid").val(amount.toFixed(2));
+        }
+
 
         //处理双击事件
         $(function () {
 
+            //商品双击事件
             $("#dg3").datagrid({
                 onDblClickRow: function (index, row) {
                     $("#saveAndAddNextButton").show();
 
                     $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
                     $("#fm4").form("load", row);//使用选中的行的数据，为新打开的窗口赋值
-                    $("#lastReturnPrice").val("￥"+row.lastPurchasingPrice);
+                    $("#lastReturnPrice").val("￥" + row.lastPurchasingPrice);
                     $("#price").numberbox("setValue", row.lastPurchasingPrice);
                     $("#num").focus();
 
@@ -161,6 +281,39 @@
             });
         });
 
+        //保存退货单商品
+        function saveReturnGoods() {
+            var goodsJson = JSON.stringify($("#dg").datagrid("getData").rows);
+            $("#goodsJson").val(goodsJson);
+            $("#returnNumber").val($("#dh").text());
+            $("#fm6").form("submit", {
+                url: "/admin/returnList/save",
+                onSubmit: function () {
+                    if ($("#dg").datagrid("getRows").length == 0) {
+                        $.messager.alert("系统提示", "请添加退货商品");
+                        return false;
+                    }
+
+                    if (!$(this).form("validate")) {
+                        return false;
+                    }
+                    if (isNaN($("#supplierId").combobox("getValue"))) {
+                        $.messager.alert("系统提示", "请选择一个供应商");
+                        return false;
+                    }
+                    return true;
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.alert("系统提示", "保存退货单及退货单商品成功");
+                        window.location.reload();
+                    } else {
+                        $.messager.alert("系统提示", result.errorInfo);
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body class="easyui-layout">
@@ -206,7 +359,7 @@
                     <td>
                         <input type="hidden" id="returnNumber" name="returnNumber">
                         <input type="hidden" id="goodsJson" name="goodsJson">
-                        &nbsp;&nbsp;&nbsp;&nbsp;<a href="saveReturnGoods()" class="easyui-linkbutton"
+                        &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:saveReturnGoods()" class="easyui-linkbutton"
                                                    iconCls="icon-ok">保存</a>
                     </td>
                 </tr>

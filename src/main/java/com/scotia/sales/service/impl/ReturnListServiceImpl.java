@@ -56,7 +56,7 @@ public class ReturnListServiceImpl implements ReturnListService {
             Goods goods = goodsRepository.findById(returnListGoods.getGoodsId()).orElse(null);
             if (goods != null) {
                 //退货之后，库存增加
-                goods.setInventoryQuantity(goods.getInventoryQuantity() + returnListGoods.getNum());
+                goods.setInventoryQuantity(goods.getInventoryQuantity() - returnListGoods.getNum());
                 goods.setState(2);
                 goodsRepository.save(goods);
             }

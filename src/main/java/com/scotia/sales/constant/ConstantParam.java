@@ -28,4 +28,10 @@ public final class ConstantParam {
     //默认的进货单编号
     public static final String PURCHASE_LIST_CODE_DEFAULT = "0001";
 
+    //退货单前缀
+    public static final String RETURN_LIST_PREFIX = "TH";
+    //默认的退货单编号
+    public static final String RETURN_LIST_CODE_DEFAULT = "0001";
+
+
 }

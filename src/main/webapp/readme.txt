@@ -1,6 +1,31 @@
+一、项目介绍：
+    进销存管理系统，从最代码网站http://www.zuidaima.com/下载的源码，
+    部分经过调整（有的模块无法正常运行），原作者代码需要maven plugins spring-boot:run方式运行，
+    经过调整，可以在Intellij里面调试运行，后续功能界面一一修正，感谢原作者的付出。
+    2020-11-25 8:27:51
+
+二、涉及的技术
+    Spring boot + spring data jpa + jquery + mysql+shiro(权限管理)
+    + maven + bootstrap + highcharts4
+
+三、运行环境
+    JDK8+Intellij+Maven
+四、数据库脚本
+        参见jxc-SQL.sql，数据源参见application.yml，根据各自需要进行配置。
+
+五、本项目的git地址为：https://github.com/guardiangel/sales.git
+
+六、项目构建方式：
+    1.	从github拉取项目 本例新建目录G:\salesfromgithub\sales，在doc下面执行
+        git clone https://github.com/guardiangel/sales.git
+    2.	使用idea新建项目File-New-Porject from Existing Sources
+    3.因为是Maven项目，则导入idea后， 在项目上右键点击，Add As Maven Project…
+
+
+
 1.数据源、应用端口
     application.yml
-2.ServletInitializer类的参见作用类的相关注释。
+2.ServletInitializer类的作用参见类的相关注释。
 3.启动配置如过滤器等，参见ShiroConfig
 4.某些注释的用法，如@JsonIgnore @JsonSerialize等
 5.main.html 中 $("#tree").tree('expandAll')的用法

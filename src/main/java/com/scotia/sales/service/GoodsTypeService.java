@@ -33,4 +33,11 @@ public interface GoodsTypeService {
      */
     public void delete(Integer id);
 
+    /**
+     * 根据商品类型名称和父ID，保存当前商品类型，同时修改父商品类型的state
+     * 定义此方法，是因为其中有两步保存动作，需要放在同一个事务里面。
+     * @param name
+     * @param parentId
+     */
+    public void saveCurrentGoodsTypeAndParentGoodsType(String name, Integer parentId);
 }

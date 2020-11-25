@@ -11,7 +11,6 @@ import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -38,18 +37,9 @@ public class GoodsTypeAdminController {
     public Map<String, Object> save(String name, Integer parentId) {
 
         Map<String, Object> resultMap = new HashMap<>();
-        GoodsType goodsType = new GoodsType();
-        goodsType.setName(name);
-        goodsType.setpId(parentId);
-        goodsType.setIcon(ConstantParam.GOODSTYPE_ICON_FOLDER);
-        goodsType.setState(ConstantParam.GOODSTYPE_STATE_LEAF);//当前节点为叶子节点
-        logService.save(new Log(Log.ADD_ACTION,"添加商品类别信息"+goodsType));
-        goodsTypeService.save(goodsType);
 
-        //把父节点的state设置为1，无论原来父节点的state是否为1，均重新设置一次
-        GoodsType parentGoodsType = goodsTypeService.findById(parentId);
-        parentGoodsType.setState(ConstantParam.GOODSTYPE_STATE_NOT_LEAF);
-        goodsTypeService.save(parentGoodsType);
+        goodsTypeService.saveCurrentGoodsTypeAndParentGoodsType(name, parentId);
+        logService.save(new Log(Log.ADD_ACTION, "添加商品类别信息：" + name));
         resultMap.put("success", true);
 
         return resultMap;
@@ -163,6 +153,4 @@ public class GoodsTypeAdminController {
 
         return jsonArray;
     }
-
-
 }

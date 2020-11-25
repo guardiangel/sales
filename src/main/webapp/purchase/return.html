@@ -10,19 +10,155 @@
     <script type="text/javascript" src="/static/js/date.js"></script>
     <script type="text/javascript">
         //初始化
-        $(document).ready(function(){
-           /* $("#supplierId").combobox({
-                mode:remote,
-                url:"/admin/supplier/comboList",
-                valueField: "name",
-                textField: "name",
-                delay:100
-            });*/
-            alert("进入");
-
-            $("#returnDate").datebox("setValue",genTodayStr()); // 设置当前日期
-
+        $(document).ready(function () {
+            /* $("#supplierId").combobox({
+                 mode:remote,
+                 url:"/admin/supplier/comboList",
+                 valueField: "name",
+                 textField: "name",
+                 delay:100
+             });*/
+            $("#returnDate").datebox("setValue", genTodayStr()); // 设置当前日期
             $("#dh").load('/admin/returnList/getReturnNumber');
+        });
+
+        function formatPrice(val, row) {
+            return "￥" + val;
+        }
+
+        function formatTotal(val, row) {
+            return "￥" + val.toFixed(2);
+        }
+
+        function formatReturnPrice(val, row) {
+            return "￥" + val;
+        }
+
+        function formatLastReturnPrice(val, row) {
+            return "￥" + val;
+        }
+
+        //打开退货单商品窗口
+        function openReturnListGoodsAddDialog() {
+            $("#dlg").dialog("open").dialog("setTitle", "退货出库商品选择");
+            $("#tree").tree({
+                url: '/admin/goodsType/loadTreeInfo',
+                type: 'post',
+                async: false,  　　//同步方式运行
+                onLoadSuccess: function (node, data) {
+                    var rootNode = $("#tree").tree("getRoot");
+                    $("#tree").tree("expand", rootNode.target);
+                },
+                onClick: function (node) {
+                    if (node.attributes.state == 0) {//叶子节点，其中attributes为后台定义
+                        $("#del").linkbutton("enable");
+                        $("#del").attr("href", "javascript:deleteGoodsType()");
+                    } else {
+                        $("#del").linkbutton("disable");
+                    }
+                    //给商品赋一个商品类型id
+                    $("dg3").datagrid("load", {
+                        "type.id": node.id
+                    });
+                }
+            });
+        }
+
+
+        //商品类型管理模块
+        function openGoodsTypeAddDialog() {
+            $("#dlg2").dialog("open").dialog("setTitle", "新增商品类型");
+        }
+
+        //保存商品类型
+        function saveGoodsType() {
+            var goodsTypeName = $("#goodsTypeName").val();//输入的商品类型名称
+            if (!$("#fm").form("validate")) {
+                return;
+            }
+            var node = $("#tree").tree("getSelected");
+            var parentId;
+            if (node == null) {
+                parentId = 1;
+            } else {
+                parentId = node.id;
+            }
+            $.post("/admin/goodsType/save",
+                {name: goodsTypeName, parentId: parentId},
+                function (result) {
+                    if (result.success) {
+                        $("#tree").tree("reload");
+                        closeGoodsTypeDialog();
+                    } else {
+                        $.messager.alert("系统提示", "提交失败，请联系管理员！");
+                    }
+                });
+        }
+
+        //删除商品类型
+        function deleteGoodsType() {
+            var node = $("#tree").tree("getSelected");
+            var id = node.id;
+            $.post("/admin/goodsType/delete", {id: id}, function (result) {
+                if (result.success) {
+                    $("#tree").tree("reload");
+                } else {
+                    $.messager.alert("系统提示", "删除商品类型失败，请联系管理员!");
+                }
+            }, "json");
+        }
+
+        //关闭商品类型添加窗口
+        function closeGoodsTypeDialog() {
+            $("#goodsTypeName").val("");
+            $("#dlg2").dialog("close");
+        }
+
+        //搜索商品 url="/admin/goods/list"
+        function searchGoods() {
+            $("#dg3").datagrid("load", {
+                "codeOrName": $("#s_codeOrName").val()
+            });
+        }
+
+        //打开商品选择窗口
+        function openGoodsChooseDialog() {
+            $("#saveAndAddNextButton").show();
+            var selectRows = $("#dg3").datagrid("getSelections");
+            if (selectRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一个商品");
+            }
+            var row = selectRows[0];
+            $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
+            $("#fm4").form("load", row);//使用选中的行的数据，为新打开的窗口赋值
+            $("#lastReturnPrice").val("￥"+row.lastPurchasingPrice);
+            $("#price").numberbox("setValue", row.lastPurchasingPrice);
+            $("#num").focus();
+            $("#action").val("add");
+        }
+
+        //关闭商品选择窗口
+        function closeGoodsChooseDialog() {
+
+        }
+
+        //处理双击事件
+        $(function () {
+
+            $("#dg3").datagrid({
+                onDblClickRow: function (index, row) {
+                    $("#saveAndAddNextButton").show();
+
+                    $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
+                    $("#fm4").form("load", row);//使用选中的行的数据，为新打开的窗口赋值
+                    $("#lastReturnPrice").val("￥"+row.lastPurchasingPrice);
+                    $("#price").numberbox("setValue", row.lastPurchasingPrice);
+                    $("#num").focus();
+
+                    $("#action").val("add");
+
+                }
+            });
         });
 
     </script>
@@ -90,7 +226,7 @@
             <th field="name" width="150" align="center">商品名称</th>
             <th field="model" width="50" align="center">商品型号</th>
             <th field="unit" width="50" align="center">单位</th>
-            <th field="price" width="50" align="center" formatter="formatPrice">单位</th>
+            <th field="price" width="50" align="center" formatter="formatPrice">单价</th>
             <th field="num" width="50" align="center">数量</th>
             <th field="total" width="50" align="center" formatter="formatTotal">总金额</th>
             <th field="typeId" width="50" align="center" hidden="hidden">商品类别</th>
@@ -163,6 +299,7 @@
     </div>
 </div>
 
+<!--商品类型增加界面-->
 <div id="dlg2" class="easyui-dialog" style="width:300px;height:120px;padding: 10px 20px"
      closed="true" buttons="#dlg-buttons2" data-options="onClose:function(){$('#goodsTypeName').val('');}">
     <form id="fm" method="post">
@@ -229,7 +366,7 @@
 </div>
 
 <div id="dlg-buttons4">
-    <a id="saveAndAddNextBuuton" href="javascript:saveGoods(2)" class="easyui-linkbutton"
+    <a id="saveAndAddNextButton" href="javascript:saveGoods(2)" class="easyui-linkbutton"
        iconCls="icon-ok">保存并新增下一商品</a>
     <a href="javascript:saveGoods(1)" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
     <a href="javascript:closeGoodsChooseDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>

@@ -18,6 +18,9 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 退货单Controller
+ */
 @RestController
 @RequestMapping("/admin/returnList")
 public class ReturnListAdminController {

@@ -50,6 +50,7 @@ public class PurchaseListAdminController {
 
     /**
      * 格式化日期，对于前端为yyyy-mm-dd格式，后端为yyyy-mm-dd hh:mm:ss格式
+     *
      * @param binder
      */
     @InitBinder
@@ -60,8 +61,8 @@ public class PurchaseListAdminController {
     }
 
 
-
-    @ResponseBody    @RequestMapping("/getPurchaseNumber")
+    @ResponseBody
+    @RequestMapping("/getPurchaseNumber")
     @RequiresPermissions(value = {"进货入库"})
     public String genBillCode(String type) throws Exception {
         StringBuffer biilCodeStr = new StringBuffer();
@@ -79,7 +80,7 @@ public class PurchaseListAdminController {
     @ResponseBody
     @RequestMapping("/save")
     @RequiresPermissions(value = {"进货入库"})
-    public Map<String,Object> save(PurchaseList purchaseList,String goodsJson)throws Exception{
+    public Map<String, Object> save(PurchaseList purchaseList, String goodsJson) throws Exception {
 
         Map<String, Object> resultMap = new HashMap<>();
 
@@ -88,7 +89,7 @@ public class PurchaseListAdminController {
         List<PurchaseListGoods> plgList = gson.fromJson(goodsJson, new TypeToken<List<PurchaseListGoods>>() {
         }.getType());
         purchaseListService.save(purchaseList, plgList);
-        logService.save(new Log(Log.ADD_ACTION,"添加进货单"));
+        logService.save(new Log(Log.ADD_ACTION, "添加进货单"));
         resultMap.put("success", true);
 
         return resultMap;
@@ -97,7 +98,7 @@ public class PurchaseListAdminController {
     @ResponseBody
     @RequestMapping("/listGoods")
     @RequiresPermissions(value = {"进货单据查询"})
-    public Map<String,Object> listGoods(Integer purchaseListId)throws Exception{
+    public Map<String, Object> listGoods(Integer purchaseListId) throws Exception {
 
         if (purchaseListId == null) {
             return null;
@@ -111,7 +112,7 @@ public class PurchaseListAdminController {
     @ResponseBody
     @RequestMapping("/list")
     @RequiresPermissions(value = {"进货单据查询"})
-    public Map<String,Object> list(PurchaseList purchaseList)throws Exception{
+    public Map<String, Object> list(PurchaseList purchaseList) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         List<PurchaseList> purchaseLists = purchaseListService.list(purchaseList, Sort.Direction.DESC, "purchaseDate");
         resultMap.put("rows", purchaseLists);
@@ -122,15 +123,13 @@ public class PurchaseListAdminController {
     @ResponseBody
     @RequestMapping("/delete")
     @RequiresPermissions(value = {"进货单据查询"})
-    public Map<String,Object> delete(Integer id)throws Exception{
+    public Map<String, Object> delete(Integer id) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         purchaseListService.delete(id);
         logService.save(new Log(Log.DELETE_ACTION, "删除进货单" + id));
         resultMap.put("success", true);
         return resultMap;
     }
-
-
 
 
 }

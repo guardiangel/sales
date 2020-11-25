@@ -23,6 +23,9 @@ public final class ConstantParam {
     //图标，非根节点的情况
     public final static String GOODSTYPE_ICON_FOLDER = "icon-folder";
 
-
+    //进货单前缀
+    public static final String PURCHASE_LIST_PREFIX = "JH";
+    //默认的进货单编号
+    public static final String PURCHASE_LIST_CODE_DEFAULT = "0001";
 
 }

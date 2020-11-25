@@ -16,3 +16,11 @@
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     其中CustomDateTimeSerializer为自定义的日期类
 
+9.jpa要求，’没有事务支持，不能执行更新和删除操作
+    如果在Repository里面的方法中使用了@Modifying，则必须在对应的service层添加@Transitional
+    本例参考PurchaseListGoodsRepository的deleteByPurchaseListId，对应的service为PurchaseListServiceImpl的delete方法
+    否则会报
+    javax.persistence.TransactionRequiredException: Executing an update/delete query
+10.purchaseSearch.html中，dg标签中的th,换成td，结果不显示，需要后续研究2020-11-25 7:55:30
+
+

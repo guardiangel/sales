@@ -2,6 +2,7 @@ package com.scotia.sales.controller.admin;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scotia.sales.constant.ConstantParam;
 import com.scotia.sales.entity.Log;
 import com.scotia.sales.entity.PurchaseList;
 import com.scotia.sales.entity.PurchaseListGoods;
@@ -60,18 +61,17 @@ public class PurchaseListAdminController {
 
 
 
-    @ResponseBody
-    @RequestMapping("/getPurchaseNumber")
+    @ResponseBody    @RequestMapping("/getPurchaseNumber")
     @RequiresPermissions(value = {"进货入库"})
     public String genBillCode(String type) throws Exception {
         StringBuffer biilCodeStr = new StringBuffer();
-        biilCodeStr.append("JH");
+        biilCodeStr.append(ConstantParam.PURCHASE_LIST_PREFIX);
         biilCodeStr.append(DateUtil.getCurrentDateStr()); // 拼接当前日期
         String purchaseNumber = purchaseListService.getTodayMaxPurchaseNumber();
         if (purchaseNumber != null) {
             biilCodeStr.append(StringUtil.formatCode(purchaseNumber));
         } else {
-            biilCodeStr.append("0001");
+            biilCodeStr.append(ConstantParam.PURCHASE_LIST_CODE_DEFAULT);
         }
         return biilCodeStr.toString();
     }
@@ -115,6 +115,18 @@ public class PurchaseListAdminController {
         Map<String, Object> resultMap = new HashMap<>();
         List<PurchaseList> purchaseLists = purchaseListService.list(purchaseList, Sort.Direction.DESC, "purchaseDate");
         resultMap.put("rows", purchaseLists);
+        return resultMap;
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    @RequiresPermissions(value = {"进货单据查询"})
+    public Map<String,Object> delete(Integer id)throws Exception{
+        Map<String, Object> resultMap = new HashMap<>();
+        purchaseListService.delete(id);
+        logService.save(new Log(Log.DELETE_ACTION, "删除进货单" + id));
+        resultMap.put("success", true);
         return resultMap;
     }
 

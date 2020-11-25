@@ -99,6 +99,7 @@ public class PurchaseListServiceImpl implements PurchaseListService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         purchaseListGoodsRepository.deleteByPurchaseListId(id);
         purchaseListRepository.deleteById(id);

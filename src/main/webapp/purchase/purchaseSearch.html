@@ -58,6 +58,27 @@
             });
         }
 
+        function deletePurchase() {
+            var selectRows = $("#dg").datagrid("getSelections");
+            if (selectRows.length != 1) {
+                $.messager.alert("系统提示", "请选择要删除的进货单");
+                return;
+            }
+            var id = selectRows[0].id;
+            $.messager.confirm("系统提示", "<fond color='red'>进货单删除后无法恢复，是否删除？", function (r) {
+                if (r) {
+                    $.post("/admin/purchaseList/delete", {id: id}, function (result) {
+                        if (result.success) {
+                            $("#dg").datagrid("reload");
+                            $("#dg2").datagrid("reload");
+                        } else {
+                            $.messager.alert("系统提示", result.errorInfo);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
         function formatTotal(val, row) {
             return "￥" + val.toFixed(2);
         }

@@ -18,6 +18,10 @@ import javax.persistence.criteria.Predicate;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Service("logService")
 public class LogServiceImpl implements LogService {
     @Resource

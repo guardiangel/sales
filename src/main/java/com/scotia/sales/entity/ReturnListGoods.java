@@ -4,6 +4,10 @@ import com.scotia.sales.entity.GoodsType;
 
 import javax.persistence.*;
 
+/**
+ * @author
+ *      Felix
+ */
 @Entity
 @Table(name = "t_return_list_goods")
 public class ReturnListGoods {

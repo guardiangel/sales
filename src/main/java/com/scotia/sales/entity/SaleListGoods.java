@@ -4,6 +4,8 @@ package com.scotia.sales.entity;
 import javax.persistence.*;
 
 /**
+ * @author
+ *      Felix
  * 销售单商品实体
  */
 @Entity

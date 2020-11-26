@@ -1,5 +1,9 @@
 package com.scotia.sales.util;
 
+/**
+ * @author
+ *      Felix
+ */
 public final class StringUtil {
 
     public static boolean isEmpty(String str) {

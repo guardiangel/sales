@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @author
+ *      Felix
  * 商品类别管理类
  */
 @RestController

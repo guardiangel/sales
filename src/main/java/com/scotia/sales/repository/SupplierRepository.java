@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 供应商Repository接口
  */
 public interface SupplierRepository extends JpaRepository<Supplier, Integer>,

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 供应商service接口
  */
 public interface SupplierService {

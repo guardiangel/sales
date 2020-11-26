@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * @author
+ *      Felix
  * 自定义realm，权限认证
  */
 public class MyRealm extends AuthorizingRealm {

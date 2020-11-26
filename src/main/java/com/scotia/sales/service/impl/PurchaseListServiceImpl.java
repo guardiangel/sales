@@ -20,6 +20,10 @@ import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Service("purchaseListService")
 public class PurchaseListServiceImpl implements PurchaseListService {
 
@@ -46,7 +50,7 @@ public class PurchaseListServiceImpl implements PurchaseListService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void save(PurchaseList purchaseList, List<PurchaseListGoods> purchaseListGoodsList) {
 
         //注意在方法上添加事物，否则会报object references an unsaved transient instance错误。
@@ -99,7 +103,7 @@ public class PurchaseListServiceImpl implements PurchaseListService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void delete(Integer id) {
         purchaseListGoodsRepository.deleteByPurchaseListId(id);
         purchaseListRepository.deleteById(id);

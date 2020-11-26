@@ -8,6 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 public interface CustomerReturnListGoodsRepository
         extends JpaRepository<CustomerReturnListGoods, Integer>, JpaSpecificationExecutor<CustomerReturnListGoods> {
 

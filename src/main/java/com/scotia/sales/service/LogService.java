@@ -6,6 +6,8 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 日志操作接口
  */
 public interface LogService {

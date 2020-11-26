@@ -15,6 +15,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Service("returnListGoodsService")
 public class ReturnListGoodsServiceImpl implements ReturnListGoodsService {
 

@@ -4,6 +4,8 @@ package com.scotia.sales;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
+ * @author
+ *      Felix
  * 使用外置的tomcat启动，则要继承SpringBootServletInitializer类，复写configure方法。使用的是War包方式
  * 如使用内置的tomcat启动，则无需此类，使用的是JAR包方式。
  * jar包和war包启动区别

@@ -2,6 +2,10 @@ package com.scotia.sales.entity;
 
 import javax.persistence.*;
 
+/**
+ * @author
+ *      Felix
+ */
 @Entity
 @Table(name = "t_supplier")
 public class Supplier {

@@ -5,6 +5,8 @@ import com.scotia.sales.entity.Menu;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 菜单操作接口
  */
 public interface MenuService {

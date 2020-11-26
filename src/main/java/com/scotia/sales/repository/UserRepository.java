@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 /**
+ * @author
+ *      Felix
  *用户Repository接口,数据库操作层。
  */
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {

@@ -5,6 +5,8 @@ import com.scotia.sales.entity.PurchaseListGoods;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 进货单商品Service接口
  */
 public interface PurchaseListGoodsService {

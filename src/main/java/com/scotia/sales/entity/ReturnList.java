@@ -9,6 +9,10 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Entity
 @Table(name = "t_return_list")
 public class ReturnList {

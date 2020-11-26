@@ -7,6 +7,10 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Entity
 @Table(name = "t_purchase_list")
 public class PurchaseList {
@@ -21,7 +25,7 @@ public class PurchaseList {
     @JoinColumn(name="supplier_id")
     private Supplier supplier; // 供应商
 
-    //如果时间不对，则可能是数据源驱动时区问题，本例修改application.yml中的serverTimezone=GMT%2B8
+    /**如果时间不对，则可能是数据源驱动时区问题，本例修改application.yml中的serverTimezone=GMT%2B8*/
     @Temporal(TemporalType.TIMESTAMP)
     private Date purchaseDate; // 进货日期
 

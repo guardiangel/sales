@@ -2,6 +2,7 @@ package com.scotia.sales.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.scotia.sales.constant.ConstantParam;
 import com.scotia.sales.entity.Log;
 import com.scotia.sales.entity.Menu;
 import com.scotia.sales.entity.Role;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @author
+ *      Felix
  * 用户登录控制器，点击提交会到此控制器
  */
 @Controller
@@ -87,7 +90,7 @@ public class UserCroller {
             map.put("errorInfo", "请输入验证码");
             return map;
         }
-        if (!session.getAttribute("checkcode").equals(imageCode)) {
+        if (!session.getAttribute(ConstantParam.CHECK_CODE).equals(imageCode)) {
             map.put("success", false);
             map.put("errorInfo", "验证码错误");
             return map;

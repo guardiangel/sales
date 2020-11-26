@@ -18,6 +18,10 @@ import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Service("returnListService")
 public class ReturnListServiceImpl implements ReturnListService {
 
@@ -44,7 +48,7 @@ public class ReturnListServiceImpl implements ReturnListService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void save(ReturnList returnList, List<ReturnListGoods> returnListGoodsList) {
 
         returnListGoodsList.forEach(returnListGoods -> {
@@ -100,7 +104,7 @@ public class ReturnListServiceImpl implements ReturnListService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void delete(Integer id) {
         returnListGoodsRepository.deleteByReturnListId(id);
         returnListRepository.deleteById(id);

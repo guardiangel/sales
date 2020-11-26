@@ -75,12 +75,12 @@
          * 删除退货单及对应的退货单商品
          */
         function deleteReturn() {
-            var selectedRows = $("#dg").datagrid("getSelections");
+            let selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
                 $.messager.alert("系统提示", "请选择要删除的退货单");
                 return;
             }
-            var id = selectedRows[0].id;
+            let id = selectedRows[0].id;
             $.messager.confirm("系统提示", "<span style='color:red'>删除退货单后将无法恢复，是否删除？</span>", function (r) {
                 if (r) {
                     $.post("/admin/returnList/delete", {id: id}, function (result) {

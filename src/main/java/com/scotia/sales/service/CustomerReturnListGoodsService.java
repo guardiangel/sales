@@ -5,6 +5,8 @@ import com.scotia.sales.entity.CustomerReturnListGoods;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 客户退货单商品Service接口
  */
 public interface CustomerReturnListGoodsService {

@@ -18,6 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * @author
+ *      Felix
  * Shiro配置类
  */
 @Configuration

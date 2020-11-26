@@ -4,6 +4,10 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Entity
 @Table(name = "t_sale_list")
 public class SaleList {

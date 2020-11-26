@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
+ * @author Felix
  * 日志实体
  */
 @Entity
@@ -82,8 +83,9 @@ public class Log {
         this.content = content;
     }
 
-    //@JsonIgnore 该注解的作用是转成json时不返回给前端
-    //JsonSerialize 作用：用于在序列化是加入开发者的代码(这句话网上抄的)，常用于对象或属性上，前提是对象实现了Serializable接口
+    /**@JsonIgnore 该注解的作用是转成json时不返回给前端
+    JsonSerialize 作用：用于在序列化是加入开发者的代码(这句话网上抄的)，常用于对象或属性上，
+    前提是对象实现了Serializable接口*/
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     public Date getTime() {
         return time;

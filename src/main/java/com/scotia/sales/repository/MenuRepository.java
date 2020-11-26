@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 权限Repository接口
  */
 public interface MenuRepository extends JpaRepository<Menu, Integer> {

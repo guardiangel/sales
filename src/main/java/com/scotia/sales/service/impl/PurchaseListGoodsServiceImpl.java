@@ -11,6 +11,10 @@ import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
 import java.util.List;
 
+/***
+ * @author
+ *      Felix
+ */
 @Service("purchaseListGoodsService")
 public class PurchaseListGoodsServiceImpl implements PurchaseListGoodsService {
 

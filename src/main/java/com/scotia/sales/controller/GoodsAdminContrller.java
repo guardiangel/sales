@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @author
+ *      Felix
  * 管理商品Controller
  * <p>
  *

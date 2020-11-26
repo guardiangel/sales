@@ -17,6 +17,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 @Service("supplierService")
 public class SupplierServiceImpl implements SupplierService {
 

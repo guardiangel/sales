@@ -3,6 +3,8 @@ package com.scotia.sales.entity;
 import javax.persistence.*;
 
 /**
+ * @author
+ *      Felix
  * 客户退货单商品实体
  */
 @Entity

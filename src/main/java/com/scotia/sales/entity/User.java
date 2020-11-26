@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 /**
+ * @author
+ *      Felix
  * 用户实体类
  */
 @Entity

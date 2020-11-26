@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 进货单商品Repository接口
  */
 public interface PurchaseListGoodsRepository

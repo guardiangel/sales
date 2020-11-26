@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 /**
+ * @author
+ *      Felix
  * 进货单Repository
  */
 public interface PurchaseListRepository

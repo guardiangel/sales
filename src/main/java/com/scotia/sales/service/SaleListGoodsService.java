@@ -6,6 +6,8 @@ import com.scotia.sales.entity.SaleListGoods;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 销售商品Service接口
  */
 public interface SaleListGoodsService {

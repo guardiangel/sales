@@ -5,6 +5,8 @@ import com.scotia.sales.entity.GoodsType;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 商品类别的service接口
  */
 public interface GoodsTypeService {

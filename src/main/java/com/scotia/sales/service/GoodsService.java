@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ * @author
+ *      Felix
  * 商品Service接口
  */
 public interface GoodsService {

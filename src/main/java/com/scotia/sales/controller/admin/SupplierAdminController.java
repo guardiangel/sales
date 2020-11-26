@@ -13,6 +13,10 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author
+ *      Felix
+ */
 @RestController
 @RequestMapping("/admin/supplier")
 public class SupplierAdminController {

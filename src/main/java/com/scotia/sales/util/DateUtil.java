@@ -6,6 +6,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author
+ *      Felix
+ */
 public final class DateUtil {
     /**
      * 把日期对象根据生成指定格式的字符串

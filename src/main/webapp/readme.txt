@@ -51,3 +51,4 @@
 11.return.html不执行$(document).ready();，浏览器F12，查看console。原因为th标签中使用了formatter属性，
     其中对应的formatPrice等方法需要提前在js里面定义完整。
 
+12.对于jquery中datagrid用法，需要熟悉。

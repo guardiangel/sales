@@ -17,6 +17,40 @@
 
         });
 
+        /**
+         * 保存商品
+         */
+        function saveSaleGoods() {
+            let goodsJson = JSON.stringify($("#dg").datagrid("getData").row);
+            $("#goodsJson").val(goodsJson);
+            $("#saleNumber").val($("#dh").text());
+            $("#fm6").form("submit", {
+                url:"/admin/saleList/save",
+                onSubmit: function (result) {
+                    if ($("#dg").datagrid("getRows").length == 0) {
+                        $.messager.alert("系统提示","请添加销售商品!");
+                        return false;
+                    }
+                    if (!$(this).form("validate")) {
+                        return false;
+                    }
+                    if (isNaN($("#customerId").combobox("getValue"))) {
+                        return false;
+                    }
+                    return true;
+                },
+                success: function (result) {
+                    let res = eval("(" + result + ")");
+                    if(result.success){
+                        alert("保存成功！")
+                        window.location.reload();
+                    }else{
+                        $.messager.alert("系统提示",result.errorInfo);
+                    }
+                }
+            });
+        }
+
         function formatPrice(val, row) {
             return "￥" + val;
         }
@@ -26,11 +60,11 @@
         }
 
         function formatPurchasingPrice(val, row) {
-            return "￥"+val;
+            return "￥" + val;
         }
 
         function formatSellingPrice(val, row) {
-            return "￥"+val;
+            return "￥" + val;
         }
 
 
@@ -41,8 +75,8 @@
             $("#goodsJson").val(gson);
             $("#saleNumber").val($("#dh").text());
             $("#fm6").form("submit", {
-                url:'/admin/saleList/save',
-                onSubmit:function () {
+                url: '/admin/saleList/save',
+                onSubmit: function () {
                     if ($("#dg").datagrid("getRows").legend == 0) {
                         $.messager.alert("system alert", "请添加销售商品");
                         return false;
@@ -68,7 +102,284 @@
             });
         }
 
+        /**
+         * 打开新增商品窗口
+         */
+        function openSaleListGoodsAddDialog() {
+            $("#dlg").dialog("open").dialog("setTitle", "销售出库商品选择！");
+            $("#tree").tree({
+                url: '/admin/goodsType/loadTreeInfo',
+                onLoadSuccess: function (node, data) {
+                    let rootNode = $("#tree").tree("getRoot");
+                    $("#tree").tree("expand", rootNode.target);
+                },
+                onClick: function (node) {
+                    if (node.attributes.state == 0) {//叶子节点
+                        $("#del").linkbutton("enable");
+                        $("#del").attr("href", "javascript:deleteGoodsType()");
+                    } else {
+                        $("#del").linkbutton("disable");
+                    }
+                    //加载打开的dlg窗口中的商品显示界面,dg3加载时，调用/admin/goods/list
+                    $("#dg3").datagrid('load', {
+                        "type.id": node.id
+                    });
+                }
+            });
+        }
 
+        /**
+         * 打开销售商品修改商品
+         */
+        function openSaleListGoodsModifyDialog() {
+            $("#saveAndAddNextButton").hide();
+            var selectedRows = $("#dg").datagrid("getSelections");
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一个商品！");
+                return;
+            }
+            let row = selectedRows[0];
+            $("#dlg4").dialog("open").dialog("setTitle", "修改销售单商品");
+            $("#fm4").form("load", row);
+            $("#sellingPrice").val("￥" + row.sellingPrice);
+            $("#price").numberbox("setValue", row.price);
+            $("#num").numberbox("setValue", row.num);
+            $("#num").focus();
+            $("#action").val("modify");
+
+            $("#rowIndex").val($("#dg").datagrid("getRowIndex", row));
+        }
+
+        /**
+         * 主页面区域，删除选中的一条行记录
+         */
+        function deleteSaleListGoods() {
+            let selectedRows = $("#dg").datagrid("getSelections");
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择要删除的商品！");
+                return;
+            }
+            $.messager.confirm("系统提示", ' <span style="color: red;">您确定要删除这个商品吗？</span> ', function (r) {
+                if (r) {
+                    $("#dg").datagrid("deleteRow", $("#dg").datagrid("getRowIndex", selectedRows[0]));
+                    setSaleListAmount();
+                }
+            });
+        }
+
+        /**
+         * 打开商品类型增加界面
+         */
+        function openGoodsTypeAddDialog() {
+            $("#dlg2").dialog("open").dialog("setTitle", "增加商品类型");
+            $("#goodsTypeName").val("");
+        }
+
+        /**
+         * 关闭商品类型选择界面
+         */
+        function closeGoodsTypeDialog() {
+            $("#goodsTypeName").val("");
+            $("#dlg2").dialog("close");
+        }
+
+        /**
+         * 保存商品类型
+         */
+        function saveGoodsType() {
+            let goodsTypeName = $("#goodsTypeName").val();
+            if (!$("#fm").form("validate")) {
+                return;
+            }
+            let node = $("#tree").tree("getSelected");//获得打开商品类型时，选中的商品类型菜单树的id
+            let parentId;
+            if (node == null) {
+                parentId = 1;
+            } else {
+                parentId = node.id;
+            }
+
+            $.post("/admin/goodsType/save", {name: goodsTypeName, parentId: parentId}, function (result) {
+                if (result.success) {
+                    $("#tree").tree("reload");
+                    closeGoodsTypeDialog();
+                } else {
+                    $.messager.alert("系统提示", "添加商品类型失败，请联系管理员");
+                }
+            }, "json");
+        }
+
+        /**
+         * 删除商品类型
+         */
+        function deleteGoodsType() {
+            let node = $("#tree").tree("getSelected");
+            let id = node.id;
+            $.post("/admin/goodsType/delete", {id: id}, function (result) {
+                if (result.success) {
+                    $('#tree').tree('reload');
+                } else {
+                    $.messager.alert("系统提示", "提交失败，请联系管理员！");
+                }
+            }, "json");
+            //删除后，无选择行，删除按钮置灰
+            $("#del").linkbutton("disable");
+        }
+
+        $(function () {
+
+            //主页面选择一条记录
+            $("#dg").datagrid({
+                onDblClickRow: function (index, row) {
+                    $("#saveAndAddNextBuuton").hide();
+                    $("#dlg4").dialog("open").dialog("setTitle", "修改销售单商品");
+                    $("#fm4").form("load", row);
+                    $("#sellingPrice").val("￥" + row.sellingPrice);
+                    $("#price").numberbox("setValue", row.price);
+                    $("#num").numberbox("setValue", row.num);
+                    $("#num").focus();
+                    $("#action").val("modify");
+                    $("#rowIndex").val($("#dg").datagrid("getRowIndex", row));
+
+                }
+            });
+
+            //处理销售商品选择界面，双击某一行时的动作
+            $("#dg3").datagrid({
+                onDblClickRow: function (index, row) {
+                    $("#saveAndAddNextButton").show();
+
+                    $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
+                    $("#fm4").form("load", row);
+                    $("#sellingPrice").val("￥" + row.sellingPrice);
+                    $("#price").numberbox("setValue", row.sellingPrice);
+                    $("#num").focus();
+
+                    $("#action").val("add");//增加值域，在saveGoods方法使用
+                }
+            });
+        });
+
+        /**
+         * 选择一个销售商品后，打开界面
+         */
+        function openGoodsChooseDialog() {
+            $("#saveAndAddNextBuuton").show();
+            let selectRows = $("#dg3").datagrid("getSelections");
+            if (selectRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一个商品！");
+                return;
+            }
+            let row = selectRows[0];
+            $("#dlg4").dialog("open").dialog("setTitle", "选择商品");
+            $("#fm4").form("load", row);
+            $("#sellingPrice").val("￥" + row.sellingPrice);
+            $("#price").numberbox("setValue", row.sellingPrice);
+            $("#num").focus();
+            $("#action").val("add");
+        }
+
+        /**
+         * 搜索销售商品
+         */
+        function searchGoods() {
+            $("#dg3").datagrid("load", {
+                "codeOrName": $("#s_codeOrName").val()
+            });
+        }
+
+        //选择商品后，不处理，关闭窗口
+        function closeGoodsChooseDialog() {
+            $("#dlg4").dialog("close");
+            resetValue();
+        }
+
+        /**
+         * 关闭商品窗口
+         */
+        function closeGoodsDialog() {
+            $("#s_codeOrName").val("");
+            $("#dlg").dialog("close");
+        }
+
+
+        /**
+         * 选择一个商品后，进行保存
+         * @param type
+         */
+        function saveGoods(type) {
+            //add or modify
+            let action = $("#action").val();
+            if (!$("#fm5").form("validate")) {
+                return;
+            }
+            if ("add" == action) {
+                let selectedRows = $("#dg3").datagrid("getSelections");
+                let row = selectedRows[0];
+                let price = $("#price").numberbox("getValue");
+                let num = $("#num").numberbox("getValue");
+                let total = price * num;
+                $("#dg").datagrid("appendRow", {
+                    code: row.code,
+                    name: row.name,
+                    model: row.model,
+                    unit: row.unit,
+                    price: price,
+                    num: num,
+                    total: total,
+                    typeId: row.type.id,
+                    goodsId: row.id,
+                    inventoryQuantity: row.inventoryQuantity,
+                    sellingPrice: row.sellingPrice
+                });
+            } else if ("modify" == action) {
+                let rowIndex = $("#rowIndex").val();
+                let selectedRows = $("#dg").datagrid("getSelections");
+                let row = selectedRows[0];
+                let price = $("#price").numberbox("getValue");
+                let num = $("#num").numberbox("getValue");
+                let total = price * num;
+                $('#dg').datagrid('updateRow', {
+                    index: rowIndex,
+                    row: {
+                        code: row.code,
+                        name: row.name,
+                        model: row.model,
+                        unit: row.unit,
+                        price: price,
+                        num: num,
+                        total: total,
+                        typeId: row.typeId,
+                        goodsId: row.id,
+                        inventoryQuantity: row.inventoryQuantity,
+                        sellingPrice: row.sellingPrice
+                    }
+                });
+            }
+            setSaleListAmount();
+            if (type == 1) {
+                closeGoodsDialog();
+            }
+            closeGoodsChooseDialog();
+
+        }
+
+        function setSaleListAmount() {
+            let rows = $("#dg").datagrid("getRows");
+            let amount = 0;
+            for (let i = 0; i < rows.length; i++) {
+                let row = rows[i];
+                amount += row.total;
+            }
+            $("#amountPayable").val(amount.toFixed(2));
+            $("#amountPaid").val(amount.toFixed(2));
+        }
+
+
+        function resetValue() {
+            $("#num").numberbox("setValue", "");
+            $("#price").val("");
+        }
     </script>
 </head>
 <body class="easyui-layout">

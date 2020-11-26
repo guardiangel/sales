@@ -13,6 +13,11 @@ import java.util.List;
 public interface SupplierRepository extends JpaRepository<Supplier, Integer>,
         JpaSpecificationExecutor<Supplier> {
 
+    /**
+     * 根据姓名查询供应商
+     * @param name
+     * @return
+     */
     @Query(value = "select * from t_supplier t  where t.name like ?1", nativeQuery = true)
     List<Supplier> findByName(String name);
 

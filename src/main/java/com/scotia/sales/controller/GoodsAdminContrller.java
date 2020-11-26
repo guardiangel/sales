@@ -1,5 +1,6 @@
 package com.scotia.sales.controller;
 
+import com.scotia.sales.constant.ConstantParam;
 import com.scotia.sales.entity.Goods;
 import com.scotia.sales.entity.Log;
 import com.scotia.sales.service.CustomerReturnListGoodsService;
@@ -175,7 +176,7 @@ public class GoodsAdminContrller {
         Map<String, Object> resultMap = new HashMap<>();
         Goods goods = goodsService.findById(id);
 
-        if (goods.getState() == 2) {
+        if (goods.getState() == ConstantParam.GOODS_STATE_INOROUT) {
             resultMap.put("success", false);
             resultMap.put("errorInfo", "该商品已经发生单据，不能删除！");
         } else {
@@ -199,12 +200,12 @@ public class GoodsAdminContrller {
         String maxGoodsCode = goodsService.getMaxGoodsCode();
         if (StringUtil.isNotEmpty(maxGoodsCode)) {
             Integer code = Integer.valueOf(maxGoodsCode) + 1;
-            String codes = code.toString();
+            StringBuilder codes = new StringBuilder(code);
             int length = codes.length();
             for (int i = 4; i > length; i--) {
-                codes = "0" + codes;
+                codes.append("0");
             }
-            return codes;
+            return codes.reverse().toString();
         } else {
             return "0001";
         }

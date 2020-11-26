@@ -14,6 +14,7 @@ import com.scotia.sales.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,4 +86,43 @@ public class ReturnListAdminController {
 
         return resultMap;
     }
+
+    @ResponseBody
+    @RequestMapping("/list")
+    @RequiresPermissions(value = {"退货单据查询"})
+    public Map<String, Object> list(ReturnList returnList) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<ReturnList> returnLists = returnListService.list(returnList, Sort.Direction.DESC, "returnDate");
+        resultMap.put("rows", returnLists);
+
+        return resultMap;
+    }
+
+    @ResponseBody
+    @RequestMapping("/listGoods")
+    @RequiresPermissions(value = {"退货单据查询"})
+    public Map<String, Object> listGoods(Integer returnListId) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<ReturnListGoods> returnListGoodsList = returnListGoodsService.listByReturnListId(returnListId);
+        resultMap.put("rows", returnListGoodsList);
+
+        return resultMap;
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    @RequiresPermissions(value = {"退货单据查询"})
+    public Map<String, Object> delete(Integer id) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        returnListService.delete(id);
+        resultMap.put("success", true);
+
+        return resultMap;
+    }
+
+
 }

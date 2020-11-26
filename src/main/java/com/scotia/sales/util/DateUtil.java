@@ -97,13 +97,6 @@ public final class DateUtil {
 
 
     public static void main(String[] args) throws Exception {
-		/*List<String> datas=getRangeDatas("2017-10-28","2017-11-02");
-		for(String data:datas){
-			System.out.println(data);
-		}*/
-        List<String> months = getRangeMonth("2017-09", "2018-12");
-        for (String month : months) {
-            System.out.println(month);
-        }
+
     }
 }

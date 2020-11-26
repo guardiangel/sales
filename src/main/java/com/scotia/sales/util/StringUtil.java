@@ -19,12 +19,12 @@ public final class StringUtil {
         try {
             int length = str.length();
             Integer num = Integer.valueOf(str.substring(length - 4, length)) + 1;
-            String codeNum = num.toString();
+            StringBuilder codeNum = new StringBuilder(num.toString());
             int codeLength = codeNum.length();
             for (int i = 4; i > codeLength; i--) {
-                codeNum = "0" + codeNum;
+                codeNum.append("0");
             }
-            return codeNum;
+            return codeNum.reverse().toString();
         } catch (NumberFormatException e) {
             return "0100";
         }

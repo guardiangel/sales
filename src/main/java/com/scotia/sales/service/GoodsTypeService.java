@@ -16,8 +16,10 @@ public interface GoodsTypeService {
      */
     public GoodsType findById(Integer id);
 
-    /*
-    根据父ID，查询所有商品类别
+    /**
+     * 根据父ID，查询所有商品类别
+     * @param parentId
+     * @return
      */
     public List<GoodsType> findByParentId(int parentId);
 

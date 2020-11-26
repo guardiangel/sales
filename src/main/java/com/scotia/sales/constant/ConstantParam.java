@@ -33,5 +33,14 @@ public final class ConstantParam {
     //默认的退货单编号
     public static final String RETURN_LIST_CODE_DEFAULT = "0001";
 
+    //商品初始状态
+    public static final int GOODS_STATE_INITIATE = 0;
+
+    //商品期初库存入仓库
+    public static final int GOODS_STATE_STORE = 1;
+
+    //有进货或者销售单据
+    public static final int GOODS_STATE_INOROUT = 2;
+
 
 }

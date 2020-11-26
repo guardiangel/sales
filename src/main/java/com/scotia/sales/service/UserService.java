@@ -10,8 +10,12 @@ import java.util.List;
  */
 public interface UserService {
 
+
     /**
      * 根据用户名查询实体
+     * @param userName
+     * @return
+     *      用户对象
      */
     public User findByUserName(String userName);
 

@@ -73,6 +73,7 @@ public class ReturnList {
         this.supplier = supplier;
     }
 
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
     public Date getReturnDate() {
         return returnDate;
     }

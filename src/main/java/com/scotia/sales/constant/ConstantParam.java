@@ -83,5 +83,15 @@ public final class ConstantParam {
      */
     public static final String SALE_LIST_CODE_DEFAULT = "0001";
 
+    /**
+     * 客户退货单号前缀
+     */
+    public static final String CUSTOMER_RETURN_LIST_PREFIX = "XH";
+
+    /**
+     * 默认的客户退货单编号
+     */
+    public static final String CUSTOMER_RETURN_LIST_CODE_DEFAULT = "0001";
+
 
 }

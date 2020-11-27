@@ -1,5 +1,7 @@
 package com.scotia.sales.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -74,6 +76,7 @@ public class CustomerReturnList {
         this.customer = customer;
     }
 
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
     public Date getCustomerReturnDate() {
         return customerReturnDate;
     }

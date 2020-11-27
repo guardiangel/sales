@@ -3,9 +3,7 @@ package com.scotia.sales.controller.admin;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scotia.sales.constant.ConstantParam;
-import com.scotia.sales.entity.CustomerReturnList;
-import com.scotia.sales.entity.CustomerReturnListGoods;
-import com.scotia.sales.entity.Log;
+import com.scotia.sales.entity.*;
 import com.scotia.sales.service.CustomerReturnListGoodsService;
 import com.scotia.sales.service.CustomerReturnListService;
 import com.scotia.sales.service.LogService;
@@ -15,6 +13,7 @@ import com.scotia.sales.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,18 +78,51 @@ public class CustomerReturnListAdminController {
         customerReturnList.setUser(userService.findByUserName((String) SecurityUtils.getSubject().getPrincipal()));
 
         Gson gson = new Gson();
-        List<CustomerReturnListGoods> plgList = gson.fromJson(goodsJson, new TypeToken< List<CustomerReturnListGoods>>() {
+        List<CustomerReturnListGoods> plgList = gson.fromJson(goodsJson, new TypeToken<List<CustomerReturnListGoods>>() {
         }.getType());
 
         customerReturnListService.save(customerReturnList, plgList);
 
-        logService.save(new Log(Log.ADD_ACTION,"添加客户退货单"));
+        logService.save(new Log(Log.ADD_ACTION, "添加客户退货单"));
 
         resultMap.put("success", true);
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping("/list")
+    @RequiresPermissions(value = {"退货单据查询"})
+    public Map<String, Object> list(CustomerReturnList customerReturnList) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<CustomerReturnList> customerReturnLists =
+                customerReturnListService.list(customerReturnList, Sort.Direction.DESC, "customerReturnDate");
+        resultMap.put("rows", customerReturnLists);
+        return resultMap;
+    }
 
+    @ResponseBody
+    @RequestMapping("/listGoods")
+    @RequiresPermissions(value = {"退货单据查询"})
+    public Map<String, Object> listGoods(Integer customerReturnListId) throws Exception {
+        if (customerReturnListId == null) {
+            return null;
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        List<CustomerReturnListGoods> customerReturnListGoods =
+                customerReturnListGoodsService.listByCustomerReturnListId(customerReturnListId);
+        resultMap.put("rows", customerReturnListGoods);
+        return resultMap;
+    }
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    @RequiresPermissions(value = {"退货单据查询"})
+    public Map<String, Object> delete(Integer id) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        customerReturnListService.delete(id);
+        resultMap.put("success", true);
+        return resultMap;
+    }
 
 
 }

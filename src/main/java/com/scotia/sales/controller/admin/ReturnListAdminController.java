@@ -10,6 +10,7 @@ import com.scotia.sales.service.LogService;
 import com.scotia.sales.service.ReturnListGoodsService;
 import com.scotia.sales.service.ReturnListService;
 import com.scotia.sales.service.UserService;
+import com.scotia.sales.util.DateUtil;
 import com.scotia.sales.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -60,8 +61,9 @@ public class ReturnListAdminController {
     @RequiresPermissions(value = {"退货出库"})
     public String getReturnNumber(String type) throws Exception {
 
-        StringBuffer billCodeStr = new StringBuffer();
+        StringBuilder billCodeStr = new StringBuilder();
         billCodeStr.append(ConstantParam.RETURN_LIST_PREFIX);
+        billCodeStr.append(DateUtil.getCurrentDateStr());
         String returnNumber = returnListService.getTodayMaxReturnNumber();
         if (returnNumber != null) {
             billCodeStr.append(StringUtil.formatCode(returnNumber));

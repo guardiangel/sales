@@ -15,6 +15,7 @@ import com.scotia.sales.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +69,7 @@ public class SaleListAdminController {
         }
         return stringBuilder.toString();
     }
+
     @ResponseBody
     @RequestMapping("/save")
     @RequiresPermissions(value = {"销售出库"})
@@ -78,13 +80,42 @@ public class SaleListAdminController {
         List<SaleListGoods> plgList = gson.fromJson(goodsJson, new TypeToken<List<SaleListGoods>>() {
         }.getType());
         saleListService.save(saleList, plgList);
-        logService.save(new Log(Log.ADD_ACTION,"添加销售单"));
+        logService.save(new Log(Log.ADD_ACTION, "添加销售单"));
         resultMap.put("success", true);
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping("/list")
+    @RequiresPermissions(value = {"销售单据查询"})
+    public Map<String, Object> list(SaleList saleList) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<SaleList> saleLists = saleListService.list(saleList, Sort.Direction.DESC, "saleDate");
+        resultMap.put("rows", saleLists);
+        return resultMap;
+    }
 
+    @ResponseBody
+    @RequestMapping("/listGoods")
+    @RequiresPermissions(value = {"销售单据查询"})
+    public Map<String, Object> listGoods(Integer saleListId) throws Exception {
+        if (saleListId == null) {
+            return null;
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        List<SaleListGoods> saleListGoods = saleListGoodsService.listBySaleListId(saleListId);
+        resultMap.put("rows", saleListGoods);
+        return resultMap;
+    }
 
-
+    @ResponseBody
+    @RequestMapping("/delete")
+    @RequiresPermissions(value = {"销售单据查询"})
+    public Map<String, Object> delete(Integer id) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        saleListService.delete(id);
+        resultMap.put("success", true);
+        return resultMap;
+    }
 
 }

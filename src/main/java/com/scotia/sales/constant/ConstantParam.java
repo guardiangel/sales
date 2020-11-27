@@ -93,5 +93,14 @@ public final class ConstantParam {
      */
     public static final String CUSTOMER_RETURN_LIST_CODE_DEFAULT = "0001";
 
+    /**
+     * 商品报损单前缀
+     */
+    public static final String DAMAGE_LIST_PREFIX = "BS";
+    /**
+     * 商品报损单编号
+     */
+    public static final String DAMAGE_LIST_CODE_DEFAULT = "0001";
+
 
 }

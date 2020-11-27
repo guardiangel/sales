@@ -118,4 +118,44 @@ public class SaleListAdminController {
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping("/update")
+    @RequiresPermissions(value = {"客户统计"})
+    public Map<String, Object> update(Integer id) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        SaleList saleList = saleListService.findById(id);
+        saleList.setState(ConstantParam.SALELIST_STATE_PAID);
+        saleListService.update(saleList);
+        resultMap.put("success", true);
+
+        return resultMap;
+    }
+
+    /**
+     * 根据条件查询商品销售情况
+     * @param saleList
+     * @param saleListGoods
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/listCount")
+    @RequiresPermissions(value = {"商品销售统计"})
+    public Map<String, Object> listCount(SaleList saleList, SaleListGoods saleListGoods) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<SaleList> sales = saleListService.list(saleList, Sort.Direction.DESC, "saleDate");
+        sales.forEach(saleList1 -> {
+            saleListGoods.setSaleList(saleList1);
+            List<SaleListGoods> plgList = saleListGoodsService.list(saleListGoods);
+            plgList.forEach(plg -> {
+                plg.setSaleList(null);
+            });
+            saleList1.setSaleListGoodsList(plgList);
+        });
+        resultMap.put("rows", sales);
+
+        return resultMap;
+    }
+
 }

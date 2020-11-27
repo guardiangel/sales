@@ -124,5 +124,46 @@ public class CustomerReturnListAdminController {
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping("/update")
+    @RequiresPermissions(value = {"客户统计"})
+    public Map<String, Object> update(Integer id) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        CustomerReturnList customerReturnList = customerReturnListService.findById(id);
+        customerReturnList.setState(ConstantParam.CUSTOMERRETURNLIST_STATE_PAID);
+        customerReturnListService.update(customerReturnList);
+        resultMap.put("success", true);
+
+        return resultMap;
+    }
+
+    /**
+     * 根据条件查询商品销售情况
+     * @param customerReturnList
+     * @param customerReturnListGoods
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/listCount")
+    @RequiresPermissions(value = {"商品销售统计"})
+    public Map<String, Object> listCount(CustomerReturnList customerReturnList,
+                                         CustomerReturnListGoods customerReturnListGoods) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<CustomerReturnList> customerReturnLists = customerReturnListService.list(customerReturnList, Sort.Direction.DESC, "customerReturnDate");
+        customerReturnLists.forEach(customerReturnList1 -> {
+            customerReturnListGoods.setCustomerReturnList(customerReturnList1);
+            List<CustomerReturnListGoods> plgList = customerReturnListGoodsService.list(customerReturnListGoods);
+            plgList.forEach(plg -> {
+                plg.setCustomerReturnList(null);
+            });
+            customerReturnList1.setCustomerReturnListGoodsList(plgList);
+        });
+        resultMap.put("rows", customerReturnLists);
+
+        return resultMap;
+    }
+
 
 }

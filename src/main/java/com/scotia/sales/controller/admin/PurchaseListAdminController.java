@@ -30,8 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author
- *      Felix
+ * @author Felix
  * 进货单Controller
  */
 @RestController
@@ -133,5 +132,46 @@ public class PurchaseListAdminController {
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping("/update")
+    @RequiresPermissions(value = {"供应商统计"})
+    public Map<String, Object> update(Integer id) throws Exception {
 
+        Map<String, Object> resultMap = new HashMap<>();
+        PurchaseList purchaseList = purchaseListService.findById(id);
+        purchaseList.setState(ConstantParam.PURCHASELIST_STATE_PAID);
+        purchaseListService.update(purchaseList);
+        resultMap.put("success", true);
+
+        return resultMap;
+    }
+
+    /**
+     * 获取采购单所有信息
+     * @param purchaseList
+     * @param purchaseListGoods
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping("/listCount")
+    @RequiresPermissions(value = {"商品采购统计"})
+    public Map<String, Object> listCount(PurchaseList purchaseList,PurchaseListGoods purchaseListGoods) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<PurchaseList> purchaseLists = purchaseListService
+                .list(purchaseList, Sort.Direction.DESC, "purchaseDate");
+
+        purchaseLists.forEach(p -> {
+           // purchaseListGoods.setPurchaseList(p);
+            List<PurchaseListGoods> plgList = purchaseListGoodsService.list(purchaseListGoods);
+            plgList.forEach(plgGoods->{
+                plgGoods.setPurchaseList(null);
+            });
+            p.setPurchaseListGoodsList(plgList);
+        });
+        resultMap.put("rows", purchaseLists);
+
+        return resultMap;
+    }
 }

@@ -19,6 +19,7 @@ public class DamageListGoodsServiceImpl implements DamageListGoodsService {
 
     @Override
     public List<DamageListGoods> listByDamageListId(Integer damageListId) {
-        return null;
+        return damageListGoodsRepository.listByDamageListId(damageListId);
     }
+
 }

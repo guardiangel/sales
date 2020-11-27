@@ -13,6 +13,7 @@ import com.scotia.sales.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,6 +83,33 @@ public class DamageListAdminController {
         damageListService.save(damageList, plgList);
         logService.save(new Log(Log.ADD_ACTION, "商品报损，添加报损单"));
         resultMap.put("success", true);
+
+        return resultMap;
+    }
+
+    @ResponseBody
+    @RequestMapping("/list")
+    @RequiresPermissions(value = {"报损报溢查询"})
+    public Map<String, Object> list(DamageList damageList) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        List<DamageList> damageListList =
+                damageListService.list(damageList, Sort.Direction.DESC, "damageDate");
+        resultMap.put("rows", damageListList);
+        return resultMap;
+    }
+
+    @ResponseBody
+    @RequestMapping("/listGoods")
+    @RequiresPermissions(value = {"报损报溢查询"})
+    public Map<String, Object> listGoods(Integer damageListId) throws Exception {
+
+        if (damageListId == null) {
+            return null;
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        List<DamageListGoods> damageListGoods = damageListGoodsService.listByDamageListId(damageListId);
+        resultMap.put("rows", damageListGoods);
 
         return resultMap;
     }

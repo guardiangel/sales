@@ -13,6 +13,7 @@ import com.scotia.sales.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,5 +88,32 @@ public class OverflowListAdminController {
 
         return resultMap;
     }
+
+    @ResponseBody
+    @RequestMapping("/list")
+    @RequiresPermissions(value = {"报损报溢查询"})
+    public Map<String, Object> list(OverflowList overflowList) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<OverflowList> overflowLists =
+                overflowListService.list(overflowList, Sort.Direction.DESC, "overflowDate");
+        resultMap.put("rows", overflowLists);
+        return resultMap;
+    }
+
+    @ResponseBody
+    @RequestMapping("/listGoods")
+    @RequiresPermissions(value = {"报损报溢查询"})
+    public Map<String, Object> listGoods(Integer overflowListId) throws Exception {
+
+        if (overflowListId == null) {
+            return null;
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        List<OverflowListGoods> overflowListGoods = overflowListGoodsService.listByOverflowListId(overflowListId);
+        resultMap.put("rows", overflowListGoods);
+
+        return resultMap;
+    }
+
 
 }

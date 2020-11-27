@@ -110,5 +110,33 @@ public final class ConstantParam {
      */
     public static final String OVERFLOW_LIST_CODE_DEFAULT = "0001";
 
+    /**
+     * 购买的产品支付状态，1是已支付，2是未支付
+     */
+    public static final int PURCHASELIST_STATE_PAID = 1;
+
+    public static final int PURCHASELIST_STATE_NOT_PAID = 2;
+
+    /**
+     * 退货产品支付状态，1是已支付，2是未支付
+     */
+    public static final int RETURNLIST_STATE_PAID = 1;
+
+    public static final int RETURNLIST_STATE_NOT_PAID = 2;
+
+    /**
+     * 卖出产品支付状态，1是已支付，2是未支付
+     */
+    public static final int SALELIST_STATE_PAID = 1;
+
+    public static final int SALELIST_STATE_NOT_PAID = 2;
+
+ /**
+     * 卖出产品支付状态，1是已支付，2是未支付
+     */
+    public static final int CUSTOMERRETURNLIST_STATE_PAID = 1;
+
+    public static final int CUSTOMERRETURNLIST_STATE_NOT_PAID = 2;
+
 
 }

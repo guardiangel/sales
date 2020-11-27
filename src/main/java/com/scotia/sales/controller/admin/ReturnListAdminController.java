@@ -3,9 +3,7 @@ package com.scotia.sales.controller.admin;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scotia.sales.constant.ConstantParam;
-import com.scotia.sales.entity.Log;
-import com.scotia.sales.entity.ReturnList;
-import com.scotia.sales.entity.ReturnListGoods;
+import com.scotia.sales.entity.*;
 import com.scotia.sales.service.LogService;
 import com.scotia.sales.service.ReturnListGoodsService;
 import com.scotia.sales.service.ReturnListService;
@@ -128,5 +126,42 @@ public class ReturnListAdminController {
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping("/update")
+    @RequiresPermissions(value = {"供应商统计"})
+    public Map<String, Object> update(Integer id) throws Exception {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        ReturnList returnList = returnListService.findById(id);
+        returnList.setState(ConstantParam.RETURNLIST_STATE_PAID);
+        returnListService.update(returnList);
+        resultMap.put("success", true);
+
+        return resultMap;
+    }
+
+    /**
+     * 客户统计 获取退货单的所有商品信息
+     * @param returnList
+     * @param returnListGoods
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/listCount")
+    @RequiresPermissions(value = { "客户统计" })
+    public Map<String,Object> listCount(ReturnList returnList,ReturnListGoods returnListGoods)throws Exception{
+        Map<String, Object> resultMap = new HashMap<>();
+        List<ReturnList> returnListList=returnListService.list(returnList, Sort.Direction.DESC, "returnDate");
+        for(ReturnList pl:returnListList){
+           // returnListGoods.setReturnList(pl);
+            List<ReturnListGoods> rlgList=returnListGoodsService.list(returnListGoods);
+            for(ReturnListGoods rlg:rlgList){
+                rlg.setReturnList(null);
+            }
+            pl.setReturnListGoodsList(rlgList);
+        }
+        resultMap.put("rows", returnListList);
+        return resultMap;
+    }
 
 }

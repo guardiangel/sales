@@ -101,6 +101,14 @@ public final class ConstantParam {
      * 商品报损单编号
      */
     public static final String DAMAGE_LIST_CODE_DEFAULT = "0001";
+    /**
+     * 商品报溢单前缀
+     */
+    public static final String OVERFLOW_LIST_PREFIX = "BY";
+    /**
+     * 商品报溢单编号
+     */
+    public static final String OVERFLOW_LIST_CODE_DEFAULT = "0001";
 
 
 }

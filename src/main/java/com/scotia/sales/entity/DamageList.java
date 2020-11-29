@@ -5,33 +5,44 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * @author Felix
+ */
 @Entity
 @Table(name = "t_damage_list")
 public class DamageList {
     @Id
     @GeneratedValue
-    private Integer id; // 编号
+    /** 编号 */
+    private Integer id;
 
-    @Column(length=100)
-    private String damageNumber; // 报损单号
+    @Column(length = 100)
+    /** 报损单号 */
+    private String damageNumber;
 
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date damageDate; // 报损日期
+    /** 报损日期 */
+    private Date damageDate;
+    /**
+     * 起始时间 搜索用到
+     */
+    @Transient
+    private Date bDamageDate;
 
     @Transient
-    private Date bDamageDate; // 起始时间 搜索用到
-
-    @Transient
-    private Date eDamageDate; // 结束时间 搜索用到
+    /** 结束时间 搜索用到 */
+    private Date eDamageDate;
 
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user; // 操作用户
+    /** 操作用户 */
+    private User user;
 
-    @Column(length=1000)
-    private String remarks; // 备注
+    @Column(length = 1000)
+    /** 备注 */
+    private String remarks;
 
     public Integer getId() {
         return id;

@@ -153,7 +153,6 @@ public class ReturnListAdminController {
         Map<String, Object> resultMap = new HashMap<>();
         List<ReturnList> returnListList=returnListService.list(returnList, Sort.Direction.DESC, "returnDate");
         for(ReturnList pl:returnListList){
-           // returnListGoods.setReturnList(pl);
             List<ReturnListGoods> rlgList=returnListGoodsService.list(returnListGoods);
             for(ReturnListGoods rlg:rlgList){
                 rlg.setReturnList(null);

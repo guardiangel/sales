@@ -163,7 +163,6 @@ public class PurchaseListAdminController {
                 .list(purchaseList, Sort.Direction.DESC, "purchaseDate");
 
         purchaseLists.forEach(p -> {
-           // purchaseListGoods.setPurchaseList(p);
             List<PurchaseListGoods> plgList = purchaseListGoodsService.list(purchaseListGoods);
             plgList.forEach(plgGoods->{
                 plgGoods.setPurchaseList(null);

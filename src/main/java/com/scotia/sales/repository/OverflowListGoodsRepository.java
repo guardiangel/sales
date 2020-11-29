@@ -24,6 +24,10 @@ public interface OverflowListGoodsRepository extends JpaRepository<OverflowListG
             nativeQuery = true)
     List<OverflowListGoods> listByOverflowListId(Integer overflowListid);
 
+    /**
+     *  根据报溢单 ID，删除对应的报溢单 商品
+     * @param overflowListId
+     */
     @Query(value = "delete from t_overflow_list_goods where overflow_list_id=?1",
             nativeQuery = true)
     @Modifying

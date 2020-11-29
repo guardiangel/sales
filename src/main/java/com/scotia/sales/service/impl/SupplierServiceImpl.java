@@ -15,6 +15,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -82,5 +84,15 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public void delete(Integer id) {
         supplierRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteByIds(String ids) {
+        String[] idArray = ids.split(",");
+        Arrays.stream(idArray).forEach(id->{
+            Integer intId = Integer.valueOf(id);
+            supplierRepository.deleteById(intId);
+        });
     }
 }

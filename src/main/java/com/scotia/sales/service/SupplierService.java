@@ -59,4 +59,10 @@ public interface SupplierService {
      */
     public void delete(Integer id);
 
+    /**
+     * 删除多个数据
+     * @param ids
+     */
+    public void deleteByIds(String ids);
+
 }

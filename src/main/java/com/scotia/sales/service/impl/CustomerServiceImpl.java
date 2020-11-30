@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
+import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> list(Customer customer, Integer page, Integer pageSize, Sort.Direction direction, String... properties) {
-        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, direction, properties);
         Page<Customer> pageUser = customerRepository.findAll((Specification<Customer>) (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
             if (customer != null) {
@@ -70,5 +72,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void delete(Integer id) {
         customerRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteByIds(String ids) {
+        String[] strArrays = ids.split(",");
+        Arrays.stream(strArrays).forEach(id -> {
+            Integer intId = Integer.valueOf(id);
+            customerRepository.deleteById(intId);
+        });
     }
 }

@@ -55,4 +55,10 @@ public interface CustomerService {
      * @param id
      */
     public void delete(Integer id);
+
+    /**
+     * 根据多个id， 一齐删除数据
+     * @param ids
+     */
+    void deleteByIds(String ids);
 }

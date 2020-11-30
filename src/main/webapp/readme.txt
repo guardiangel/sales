@@ -47,6 +47,7 @@
     否则会报
     javax.persistence.TransactionRequiredException: Executing an update/delete query
 10.purchaseSearch.html中，dg标签中的th,换成td，结果不显示，需要后续研究2020-11-25 7:55:30
+    标签属性问题
 
 11.return.html不执行$(document).ready();，浏览器F12，查看console。原因为th标签中使用了formatter属性，
     其中对应的formatPrice等方法需要提前在js里面定义完整。
@@ -55,3 +56,4 @@
 
 13.对于Controller中某个方法存在多个修改操作，代码需要迁移到service层，添加事务处理。
 
+14.按日统计和按月统计两个页面，代码未调整2020-11-30 11:15:7

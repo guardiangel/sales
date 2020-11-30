@@ -8,8 +8,10 @@
     Spring boot + spring data jpa + jquery + mysql+shiro(权限管理)
     + maven + bootstrap + highcharts4
 
+    bootstrap + highcharts4实际未使用
+
 三、运行环境
-    JDK8+Intellij+Maven
+    JDK8+Intellij+Maven 3.3.9
 四、数据库脚本
         参见jxc-SQL.sql，数据源参见application.yml，根据各自需要进行配置。
 

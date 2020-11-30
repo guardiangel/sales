@@ -36,7 +36,7 @@ public interface UserRoleService {
 
     /**
      * 根据角色id删除所有关联信息
-     * @param userId
+     * @param roleId
      */
-    public void deleteByRoleId(Integer userId);
+    public void deleteByRoleId(Integer roleId);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 /**
  * @author Felix
@@ -18,6 +19,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
     private RoleMenuRepository roleMenuRepository;
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void deleteByRoleId(Integer roleId) {
         roleMenuRepository.deleteByRoleId(roleId);
     }

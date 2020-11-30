@@ -52,3 +52,6 @@
     其中对应的formatPrice等方法需要提前在js里面定义完整。
 
 12.对于jquery中datagrid用法，需要熟悉。
+
+13.对于Controller中某个方法存在多个修改操作，代码需要迁移到service层，添加事务处理。
+

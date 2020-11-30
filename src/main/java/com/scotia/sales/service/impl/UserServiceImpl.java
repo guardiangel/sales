@@ -2,6 +2,7 @@ package com.scotia.sales.service.impl;
 
 import com.scotia.sales.entity.User;
 import com.scotia.sales.repository.UserRepository;
+import com.scotia.sales.repository.UserRoleRepository;
 import com.scotia.sales.service.UserService;
 import com.scotia.sales.util.StringUtil;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -23,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserRepository userRepository;
+
+    @Resource
+    private UserRoleRepository userRoleRepository;
 
     @Override
     public User findByUserName(String userName) {
@@ -72,7 +77,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void delete(Integer userId) {
+        userRoleRepository.deleteByUserId(userId);
         userRepository.deleteById(userId);
     }
 }

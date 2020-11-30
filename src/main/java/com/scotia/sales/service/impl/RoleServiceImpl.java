@@ -45,7 +45,7 @@ public class RoleServiceImpl implements RoleService {
         Page<Role> pageRole =roleRepository.findAll((Specification<Role>) (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
             if (role != null) {
-                if (StringUtil.isEmpty(role.getName())) {
+                if (StringUtil.isNotEmpty(role.getName())) {
                     predicate.getExpressions().add(criteriaBuilder.like(root.get("name"), "%" + role.getName().trim() + "%"));
                 }
                 predicate.getExpressions().add(criteriaBuilder.notEqual(root.get("id"), 1));//排除管理员

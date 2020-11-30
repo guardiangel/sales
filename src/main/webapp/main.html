@@ -27,10 +27,10 @@
 <script type="text/javascript" src="/static/jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript">
 	
-	var url;
+	let url;
 	
 	function showTime(){
-		var date = new Date();
+		let date = new Date();
 		this.year = date.getFullYear();
 		this.month = date.getMonth() + 1;
 		this.date = date.getDate();
@@ -47,7 +47,7 @@
 	//添加首页，使用IFRAME标签
 	$(document).ready(function() {
 		
-		var content="<iframe frameborder=0 scrolling='auto' style='width:100%;height:99%' src='/common/stockSearch.html'></iframe>";
+		let content="<iframe frameborder=0 scrolling='auto' style='width:100%;height:99%' src='/common/stockSearch.html'></iframe>";
 		$("#tabs").tabs("add",{
 			title:"首页",
 			iconCls:"menu-25",//
@@ -82,7 +82,7 @@
 			if($("#tabs").tabs("exists",node.text)){
 				$("#tabs").tabs("select",node.text);
 			}else{
-				var content="<iframe frameborder=0 scrolling='auto' style='width:100%;height:99%' src='"+node.attributes.url+"'></iframe>";
+				let content="<iframe frameborder=0 scrolling='auto' style='width:100%;height:99%' src='"+node.attributes.url+"'></iframe>";
 				$("#tabs").tabs("add",{
 					title:node.text,
 					iconCls:node.iconCls,
@@ -104,7 +104,7 @@
 		function openPasswordModifyDialog(){
 			$("#dlg").dialog("open").dialog("setTitle","修改密码");
 			url="/admin/user/modifyPassword";
-			window.location.href=url;
+			//window.location.href=url;
 		}
 		
 		
@@ -131,45 +131,45 @@
         //方法命名为closeTab，不太合适。
         function closeTab(menu, type) {
         	//获得所有打开的标签页面
-            var allTabs = $("#tabs").tabs('tabs');
-            var allTabtitle = [];
+            let allTabs = $("#tabs").tabs('tabs');
+            let allTabtitle = [];
             $.each(allTabs, function (i, n) {
             	//对每个标签页面，增加一个options选项。
-                var opt = $(n).panel('options');
+                let opt = $(n).panel('options');
                 if (opt.closable)
                     allTabtitle.push(opt.title);
             });
             //取当前标题项数据
-            var curTabTitle = $(menu).data("tabTitle");
-            var curTabIndex = $("#tabs").tabs("getTabIndex", $("#tabs").tabs("getTab", curTabTitle));
+            let curTabTitle = $(menu).data("tabTitle");
+            let curTabIndex = $("#tabs").tabs("getTabIndex", $("#tabs").tabs("getTab", curTabTitle));
             switch (type) {
            		case "1": // 刷新当前标签页
-    	            var panel = $("#tabs").tabs("getTab", curTabTitle).panel("refresh");
+    	            let panel = $("#tabs").tabs("getTab", curTabTitle).panel("refresh");
     	            break;
                 case "2": // 关闭当前标签页
                     $("#tabs").tabs("close", curTabIndex);
                     return false;
                     break;
                 case "3": // 关闭全部标签页
-                    for (var i = 0; i < allTabtitle.length; i++) {
+                    for (let i = 0; i < allTabtitle.length; i++) {
                         $('#tabs').tabs('close', allTabtitle[i]);
                     }
                     break;
                 case "4": // 关闭其他标签页
-                    for (var i = 0; i < allTabtitle.length; i++) {
+                    for (let i = 0; i < allTabtitle.length; i++) {
                         if (curTabTitle != allTabtitle[i])
                             $('#tabs').tabs('close', allTabtitle[i]);
                     }
                     $('#tabs').tabs('select', curTabTitle);
                     break;
                 case "5": // 关闭右侧标签页
-                    for (var i = curTabIndex; i < allTabtitle.length; i++) {
+                    for (let i = curTabIndex; i < allTabtitle.length; i++) {
                         $('#tabs').tabs('close', allTabtitle[i]);
                     }
                     $('#tabs').tabs('select', curTabTitle);
                     break;
                 case "6": // 关闭左侧标签页
-                    for (var i = 0; i < curTabIndex - 1; i++) {
+                    for (let i = 0; i < curTabIndex - 1; i++) {
                         $('#tabs').tabs('close', allTabtitle[i]);
                     }
                     $('#tabs').tabs('select', curTabTitle);
@@ -187,8 +187,8 @@
 		$("#fm").form("submit",{
 			url:url,
 			onSubmit:function(){
-				var newPassword=$("#newPassword").val();
-				var newPassword2=$("#newPassword2").val();
+				let newPassword=$("#newPassword").val();
+				let newPassword2=$("#newPassword2").val();
 				if(!$(this).form("validate")){
 					return false;
 				}
@@ -199,8 +199,8 @@
 				return true;
 			},
 			success:function(result){
-				var result=eval('('+result+')');
-				if(result.success){
+				let res=eval('('+result+')');
+				if(res.success){
 					$.messager.alert("系统提示","密码修改成功，下一次登录生效！");
 					resetValue();
 					$("#dlg").dialog("close");

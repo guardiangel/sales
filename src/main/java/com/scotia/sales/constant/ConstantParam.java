@@ -138,5 +138,22 @@ public final class ConstantParam {
 
     public static final int CUSTOMERRETURNLIST_STATE_NOT_PAID = 2;
 
+    /**
+     * 菜单  代表叶节点，没有叶子节点
+     */
+    public final static int MENU_STATE_LEAF = 0;
+    /**
+     * 菜单 代表根节点，可以展示查询叶子节点
+     */
+    public final static int MENU_STATE_NOT_LEAF = 1;
+
+    /**
+     * 菜单 代表叶节点，没有叶子节点
+     */
+    public final static String MENU_NODE_OPEN = "open";
+    /**
+     * 菜单 代表根节点，可以展示查询叶子节点
+     */
+    public final static String MENU_NODE_CLOSE = "close";
 
 }
